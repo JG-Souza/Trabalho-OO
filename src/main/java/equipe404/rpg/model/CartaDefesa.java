@@ -15,6 +15,7 @@ public class CartaDefesa {
     public int getCustoEnergia() {return custoEnergia;}
     public int getPoderDefesa() {return poderDefesa;}
 
+    @Override
     public String toString() {
         return "DEFESA: " + nome + " | Custo: " + custoEnergia + " | Poder: " + poderDefesa;
     }

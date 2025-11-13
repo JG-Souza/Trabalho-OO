@@ -18,6 +18,7 @@ public class CartaSuporte {
     public int getCustoEnergia() {return custoEnergia;}
     public double getPoder() {return poder;}
 
+    @Override
     public String toString() {
         return "SUPORTE: " + nome + " | Custo: " + custoEnergia + " | Efeito: " + efeito + " | Valor: " + poder;
     }
