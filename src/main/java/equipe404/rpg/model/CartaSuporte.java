@@ -16,7 +16,7 @@ public class CartaSuporte {
     public String getNome() {return nome;}
     public String getEfeito() {return efeito;}
     public int getCustoEnergia() {return custoEnergia;}
-    public double getValorEfeito() {return poder;}
+    public double getPoder() {return poder;}
 
     public String toString() {
         return "SUPORTE: " + nome + " | Custo: " + custoEnergia + " | Efeito: " + efeito + " | Valor: " + poder;
