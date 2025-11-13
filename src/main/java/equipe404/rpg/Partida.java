@@ -1,46 +1,89 @@
 package equipe404.rpg;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;            // Para tratar erros de leitura (Input/Output)
+import java.net.URISyntaxException;  // Para tratar erros na conversão da URL
+import java.net.URL;                 // Para representar a localização (URL) do recurso
+import java.nio.file.Files;            // Para ler o arquivo (`Files.lines`)
+import java.nio.file.Path;             // Para representar o "caminho" do arquivo
+import java.nio.file.Paths;            // Para converter a URL em um "caminho" (`Paths.get`)
+import java.util.List;               // Para usar o tipo de retorno `List`
+import java.util.stream.Collectors;    // Para usar o `.collect(Collectors.toList())`
+import java.util.stream.Stream;          // Para usar o `Stream<String>`
 
-import equipe404.rpg.model.CartaAtaque;
-import equipe404.rpg.model.CartaDefesa;
-import equipe404.rpg.model.CartaSuporte;
-import equipe404.rpg.model.Hacker;
+import equipe404.rpg.model.*;
 
 public class Partida {
     // Atributos
     private Hacker hacker1;
     private Hacker hacker2;
-
-    //lista com as cartas disponiveis
-    //aqui é so um teste, depois tem que ver como que usa aqueles arquivos que ele passou
-
-    private static ArrayList<CartaAtaque> ataquesDisponiveis = new ArrayList<>();
-    private static ArrayList<CartaDefesa> defesasDisponiveis = new ArrayList<>();
-    private static ArrayList<CartaSuporte> suportesDisponiveis = new ArrayList<>();
+    public static List<Carta> catalogoDeCartas = new ArrayList<>(); // Para não perder as instancias de objetos e para renderizar para o jogador
 
     // Métodos
     public Partida() {
 
     }
 
-    //aqui é so um teste, depois tem que ver como que usa aqueles arquivos que ele passou
-    public static void carregarCartas() {
+    // Le os dados do arquivo e retorna uma lista de arrays com esses dados, sendo cada array uma linha do arquivo
+    public static List<String[]> lerCSV(String nomeArquivo) throws IOException, URISyntaxException {
 
-        ataquesDisponiveis.add(new CartaAtaque("Exploit Zero-Day", 5, 50));
-        ataquesDisponiveis.add(new CartaAtaque("Phishing Direcionado", 2, 20));
-        ataquesDisponiveis.add(new CartaAtaque("Força Quântica", 5, 50));
-        ataquesDisponiveis.add(new CartaAtaque("SQL Injection", 3, 30));
+        // Se a gente for criar uma classe utilitária depois, tem que mexer aqui
+        URL recursoURL = Partida.class.getResource(nomeArquivo);
 
-        defesasDisponiveis.add(new CartaDefesa("Firewall Hiperescalar", 5, 50));
-        defesasDisponiveis.add(new CartaDefesa("Reinício Seguro", 1, 10));
-        defesasDisponiveis.add(new CartaDefesa("Isolamento de Usuário", 2, 20));
-        defesasDisponiveis.add(new CartaDefesa("Controle de Acesso Dinâmico", 4, 40));
+        if (recursoURL == null) {
+            throw new IOException("Arquivo não encontrado em resources: " + nomeArquivo);
+        }
 
-        suportesDisponiveis.add(new CartaSuporte("Análise Heurística", "AUMENTA_ATAQUE", 2, 0.2));
-        suportesDisponiveis.add(new CartaSuporte("Blindagem Digital", "DIMINUI_ATAQUE", 3, 0.3));
-        suportesDisponiveis.add(new CartaSuporte("Compressão de Dados", "AUMENTA_VIDA", 10, 1));
+        Path caminho = Paths.get(recursoURL.toURI());
+
+        try (Stream<String> linhas = Files.lines(caminho)) { // linhas armazena o fluxo de strings, onde cada string é uma linha do arquivo
+            return linhas
+                .skip(1) // Pula o cabeçalho
+                .map(linha -> linha.split(",")) // Quebra a linha do registro em um array de strings, separados por virgulas
+                .collect(Collectors.toList()); // Pega todos os arrays e coloca dentro de uma lista
+        }
     }
+
+
+    // Posso tirar o dinamismo (parametragem) daqui e simplesmente ler todos os arquivos de uma vez
+    public static void carregarCartas(String tipo) {
+        if (tipo.equals("Ataque")) {
+            try {
+                List<String[]> arrayAtaque = Partida.lerCSV("/ataque.csv");
+
+                for (String[] dadosDaLinha : arrayAtaque) { // Sintaxe do forEach em Java
+                    try {
+                        String nome = dadosDaLinha[0];
+                        String tipoCarta = dadosDaLinha[1];
+                        int poder = Integer.parseInt(dadosDaLinha[2].trim());
+                        int custo = Integer.parseInt(dadosDaLinha[3].trim());
+                        String descricao = dadosDaLinha[4];
+
+                        Carta novaCarta = new Carta(nome, tipoCarta, poder, custo, descricao);
+
+                        catalogoDeCartas.add(novaCarta);
+                    } catch (NumberFormatException e) {
+                        // Se "Poder" ou "Custo" não for um número válido no CSV
+                        System.err.println("Erro ao converter dados numéricos da linha: " + String.join(",", dadosDaLinha));
+                    }
+                }
+            } catch (IOException | URISyntaxException e) {
+                // Se o "lerCSV" falhar (ex: arquivo não encontrado)
+                System.err.println("ERRO CRÍTICO: Não foi possível ler o arquivo /ataque.csv");
+            }
+
+            Partida.exibirCatalogo();
+        }
+    }
+
+
+    // Metodo para renderizar o cátalogo de cartas
+    public static void exibirCatalogo() {
+        catalogoDeCartas.forEach(carta -> {
+            System.out.println("Nome: " + carta.getNome());
+        });
+    }
+
 
     public static void prepararDeck(Hacker hacker, Scanner sc) {
         //preparar os decks pro HUMANO
@@ -75,7 +118,7 @@ public class Partida {
                 Hacker hacker1 = new Hacker(nome1, matricula1);
                 Hacker hacker2 = new Hacker(nome2, matricula2);
 
-                hacker1.imprime();
+                Partida.carregarCartas("Ataque");
 
             } else if (escolha.equals("2")) {
                 // Informações básicas do Hacker 1
