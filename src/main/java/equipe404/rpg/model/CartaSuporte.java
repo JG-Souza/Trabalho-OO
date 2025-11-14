@@ -1,25 +1,26 @@
 package equipe404.rpg.model;
 
-public class CartaSuporte {
-    private String nome;
+public class CartaSuporte extends Carta {
+    private double poderModificador;
     private String efeito;
-    private int custoEnergia;
-    private double poder;
 
-    public CartaSuporte(String nome, String efeito, int custoEnergia, double poder) {
-        this.nome = nome;
+    public CartaSuporte(String nome, double poder, int custo, String efeito, String descricao) {
+        super(nome, "suporte", custo, descricao);
+
+        this.poderModificador = poder;
         this.efeito = efeito;
-        this.custoEnergia = custoEnergia;
-        this.poder = poder;
     }
 
-    public String getNome() {return nome;}
-    public String getEfeito() {return efeito;}
-    public int getCustoEnergia() {return custoEnergia;}
-    public double getPoder() {return poder;}
-
-    @Override
-    public String toString() {
-        return "SUPORTE: " + nome + " | Custo: " + custoEnergia + " | Efeito: " + efeito + " | Valor: " + poder;
+    public double getPoderModificador() {
+        return this.poderModificador;
     }
+
+    public String getEfeito() {
+        return this.efeito;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "SUPORTE: " + nome + " | Custo: " + custoEnergia + " | Efeito: " + efeito + " | Valor: " + poder;
+//    }
 }

@@ -1,22 +1,21 @@
 package equipe404.rpg.model;
 
-public class CartaAtaque {
-    private String nome;
-    private int custo;
+public class CartaAtaque extends Carta {
+
     private int poderAtaque;
 
-    public CartaAtaque(String nome, int custo, int poderAtaque) {
-        this.nome = nome;
-        this.custo = custo;
-        this.poderAtaque = poderAtaque;
+    public CartaAtaque(String nome, int poder, int custo, String descricao) {
+        super(nome, "ataque", custo, descricao);
+
+        this.poderAtaque = poder;
     }
 
-    public String getNome() {return nome;}
-    public int getCusto() {return custo;}
-    public int getPoderAtaque() {return poderAtaque;}
-
-    @Override
-    public String toString() {
-        return "ATAQUE: " + nome + " | Custo: " + custo + " | Poder: " + poderAtaque;
+    public int getPoderAtaque() {
+        return this.poderAtaque;
     }
+
+//    @Override
+//    public String toString() {
+//        return "ATAQUE: " + nome + " | Custo: " + custo + " | Poder: " + poderAtaque;
+//    }
 }
