@@ -1,9 +1,8 @@
 package equipe404.rpg;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.io.IOException;            // Para tratar erros de leitura (Input/Output)
-import java.net.URISyntaxException;  // Para tratar erros na conversão da URL
-import java.net.URL;                 // Para representar a localização (URL) do recurso
 import java.nio.file.Files;            // Para ler o arquivo (`Files.lines`)
 import java.nio.file.Path;             // Para representar o "caminho" do arquivo
 import java.nio.file.Paths;            // Para converter a URL em um "caminho" (`Paths.get`)
@@ -17,7 +16,11 @@ public class Partida {
     // Atributos
     private Hacker hacker1;
     private Hacker hacker2;
-    public static List<Carta> catalogoDeCartas = new ArrayList<>(); // Para não perder as instancias de objetos e para renderizar para o jogador
+
+    // Para não perder as instancias e para renderizar para o jogador
+    public static List<CartaAtaque> catalogoDeAtaque = new ArrayList<>();
+    public static List<CartaDefesa> catalogoDeDefesa = new ArrayList<>();
+    public static List<CartaSuporte> catalogoDeSuporte = new ArrayList<>();
 
     // Métodos
     public Partida() {
@@ -25,64 +28,119 @@ public class Partida {
     }
 
     // Le os dados do arquivo e retorna uma lista de arrays com esses dados, sendo cada array uma linha do arquivo
-    public static List<String[]> lerCSV(String nomeArquivo) throws IOException, URISyntaxException {
-
-        // Se a gente for criar uma classe utilitária depois, tem que mexer aqui
-        URL recursoURL = Partida.class.getResource(nomeArquivo);
-
-        if (recursoURL == null) {
-            throw new IOException("Arquivo não encontrado em resources: " + nomeArquivo);
-        }
-
-        Path caminho = Paths.get(recursoURL.toURI());
+    public static List<String[]> lerCSV(String nomeArquivo) {
+        Path caminho = Paths.get(nomeArquivo);
 
         try (Stream<String> linhas = Files.lines(caminho)) { // linhas armazena o fluxo de strings, onde cada string é uma linha do arquivo
             return linhas
-                .skip(1) // Pula o cabeçalho
-                .map(linha -> linha.split(",")) // Quebra a linha do registro em um array de strings, separados por virgulas
-                .collect(Collectors.toList()); // Pega todos os arrays e coloca dentro de uma lista
+                    .skip(1) // Pula o cabeçalho
+                    .map(linha -> linha.split(",")) // Quebra a linha do registro em um array de strings, separados por virgulas
+                    .collect(Collectors.toList()); // Pega todos os arrays e coloca dentro de uma lista
+        } catch (IOException e) {
+            // Se o arquivo não for encontrado na raiz
+            System.err.println("ERRO: Não foi possível ler o arquivo: " + nomeArquivo);
+            return Collections.emptyList();
         }
     }
 
 
-    // Posso tirar o dinamismo (parametragem) daqui e simplesmente ler todos os arquivos de uma vez
-    public static void carregarCartas(String tipo) {
-        if (tipo.equals("Ataque")) {
-            try {
-                List<String[]> arrayAtaque = Partida.lerCSV("/ataque.csv");
+    public static void carregarCartas() {
 
-                for (String[] dadosDaLinha : arrayAtaque) { // Sintaxe do forEach em Java
-                    try {
-                        String nome = dadosDaLinha[0];
-                        String tipoCarta = dadosDaLinha[1];
-                        int poder = Integer.parseInt(dadosDaLinha[2].trim());
-                        int custo = Integer.parseInt(dadosDaLinha[3].trim());
-                        String descricao = dadosDaLinha[4];
+        // Ataque
+        List<String[]> arrayAtaque = Partida.lerCSV("ataque.csv");
+        for (String[] dados : arrayAtaque) { // Sintaxe do forEach em Java
+                String nome = dados[0];
+                int poder = Integer.parseInt(dados[2].trim());
+                int custo = Integer.parseInt(dados[3].trim());
+                String descricao = dados[4];
 
-                        Carta novaCarta = new Carta(nome, tipoCarta, poder, custo, descricao);
+                CartaAtaque novaCarta = new CartaAtaque(nome, poder, custo, descricao);
+                catalogoDeAtaque.add(novaCarta);
+        }
 
-                        catalogoDeCartas.add(novaCarta);
-                    } catch (NumberFormatException e) {
-                        // Se "Poder" ou "Custo" não for um número válido no CSV
-                        System.err.println("Erro ao converter dados numéricos da linha: " + String.join(",", dadosDaLinha));
-                    }
-                }
-            } catch (IOException | URISyntaxException e) {
-                // Se o "lerCSV" falhar (ex: arquivo não encontrado)
-                System.err.println("ERRO CRÍTICO: Não foi possível ler o arquivo /ataque.csv");
-            }
+        // Defesa
+        List<String[]> arrayDefesa = Partida.lerCSV("defesa.csv");
+        for (String[] dados : arrayDefesa) { // Sintaxe do forEach em Java
+            String nome = dados[0];
+            int poder = Integer.parseInt(dados[2].trim());
+            int custo = Integer.parseInt(dados[3].trim());
+            String descricao = dados[4];
 
-            Partida.exibirCatalogo();
+            CartaDefesa novaCarta = new CartaDefesa(nome, poder, custo, descricao);
+            catalogoDeDefesa.add(novaCarta);
+        }
+
+        // Suporte
+        List<String[]> arraySuporte = Partida.lerCSV("suporte.csv");
+        for (String[] dados : arraySuporte) { // Sintaxe do forEach em Java
+            String nome = dados[0];
+            double poder = Double.parseDouble(dados[2].trim());
+            int custo = Integer.parseInt(dados[3].trim());
+            String efeito = dados[4];
+            String descricao = dados[5];
+
+            CartaSuporte novaCarta = new CartaSuporte(nome, poder, custo, efeito, descricao);
+            catalogoDeSuporte.add(novaCarta);
         }
     }
 
 
-    // Metodo para renderizar o cátalogo de cartas
-    public static void exibirCatalogo() {
-        catalogoDeCartas.forEach(carta -> {
-            System.out.println("Nome: " + carta.getNome());
-        });
+    // Metodo para renderizar o cátalogo de cartas. Ao invés de renderizar um só catálogo, da pra separar por tipo.
+    public static void exibirCatalogo(String tipo) {
+        // Criar verificações
+        if (tipo.equals("ataque")) {
+            catalogoDeAtaque.forEach(carta -> {
+                System.out.println("Nome: " + carta.getNome());
+            });
+        } else if (tipo.equals("defesa")) {
+            catalogoDeDefesa.forEach(carta -> {
+                System.out.println("Nome: " + carta.getNome());
+            });
+        } else if (tipo.equals("suporte")) {
+            catalogoDeSuporte.forEach(carta -> {
+                System.out.println("Nome: " + carta.getNome());
+            });
+        }
+
     }
+
+
+    //    public static void escolherCartas() {
+//
+//        Scanner scanner = new Scanner(System.in);
+//
+//        // Instancia o Deck do Jogador
+//        Deck deck1 = new Deck();
+//
+//        // Exibir todas as cartas de ataque como opções
+//        Partida.exibirCatalogo(); // Fazer com que retorne só as de ataque
+//
+//        // Fazer o loop para a escolha das cartas. Precisa se certificar de que os inputs estão corretos, provavelmente por loops
+//        if (deck1.getCartasAtaque().size() < 5) {
+//            System.out.println("Digite o índice das 4 cartas escolhidas");
+//
+//            System.out.print("Primeira carta escolhida: ");
+//            int indiceCarta1 = scanner.nextInt();
+//
+//            System.out.print("Segunda carta escolhida: ");
+//            int indiceCarta2 = scanner.nextInt();
+//
+//            System.out.print("Terceira carta escolhida: ");
+//            int indiceCarta3 = scanner.nextInt();
+//
+//            System.out.print("Quarta carta escolhida: ");
+//            int indiceCarta4 = scanner.nextInt();
+//
+//            // Tenho que buscar no catálogo quais são as cartas referentes aos indices
+//
+//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta1));
+//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta2));
+//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta3));
+//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta4));
+//        }
+//
+//        deck1.imprimirCartas();
+//    }
 
 
     public static void prepararDeck(Hacker hacker, Scanner sc) {
@@ -118,7 +176,7 @@ public class Partida {
                 Hacker hacker1 = new Hacker(nome1, matricula1);
                 Hacker hacker2 = new Hacker(nome2, matricula2);
 
-                Partida.carregarCartas("Ataque");
+                Partida.carregarCartas();
 
             } else if (escolha.equals("2")) {
                 // Informações básicas do Hacker 1
