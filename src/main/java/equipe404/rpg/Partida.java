@@ -89,58 +89,102 @@ public class Partida {
     public static void exibirCatalogo(String tipo) {
         // Criar verificações
         if (tipo.equals("ataque")) {
-            catalogoDeAtaque.forEach(carta -> {
-                System.out.println("Nome: " + carta.getNome());
-            });
+            for(int i = 0; i < catalogoDeAtaque.size(); i++) {
+                System.out.println((i + 1) + "° carta: " + catalogoDeAtaque.get(i).getNome());
+            }
         } else if (tipo.equals("defesa")) {
-            catalogoDeDefesa.forEach(carta -> {
-                System.out.println("Nome: " + carta.getNome());
-            });
+            for(int i = 0; i < catalogoDeDefesa.size(); i++) {
+                System.out.println((i + 1) + "° carta: " + catalogoDeDefesa.get(i).getNome());
+            }
         } else if (tipo.equals("suporte")) {
-            catalogoDeSuporte.forEach(carta -> {
-                System.out.println("Nome: " + carta.getNome());
-            });
+            for(int i = 0; i < catalogoDeSuporte.size(); i++) {
+                System.out.println((i + 1) + "° carta: " + catalogoDeSuporte.get(i).getNome());
+            }
         }
 
     }
 
+    //tem que ter hacker como parametro
+    public static void escolherCartas(Hacker hacker) {
+        Scanner scanner = new Scanner(System.in);
 
-    //    public static void escolherCartas() {
-//
-//        Scanner scanner = new Scanner(System.in);
-//
-//        // Instancia o Deck do Jogador
-//        Deck deck1 = new Deck();
-//
-//        // Exibir todas as cartas de ataque como opções
-//        Partida.exibirCatalogo(); // Fazer com que retorne só as de ataque
-//
-//        // Fazer o loop para a escolha das cartas. Precisa se certificar de que os inputs estão corretos, provavelmente por loops
-//        if (deck1.getCartasAtaque().size() < 5) {
-//            System.out.println("Digite o índice das 4 cartas escolhidas");
-//
-//            System.out.print("Primeira carta escolhida: ");
-//            int indiceCarta1 = scanner.nextInt();
-//
-//            System.out.print("Segunda carta escolhida: ");
-//            int indiceCarta2 = scanner.nextInt();
-//
-//            System.out.print("Terceira carta escolhida: ");
-//            int indiceCarta3 = scanner.nextInt();
-//
-//            System.out.print("Quarta carta escolhida: ");
-//            int indiceCarta4 = scanner.nextInt();
-//
-//            // Tenho que buscar no catálogo quais são as cartas referentes aos indices
-//
-//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta1));
-//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta2));
-//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta3));
-//            deck1.addAtaque(catalogoDeCartas.get(indiceCarta4));
-//        }
-//
-//        deck1.imprimirCartas();
-//    }
+        //cria o deck inicial vazio
+        Deck deck = hacker.getDeck();
+
+        //exibir as cartas pra serem selecionadas
+
+        //seleção das cartas
+        //fazer tambem a verificação pra ver se os indices estão corretos
+        // se nao estiverem, pedir para escreverem de novo
+
+        System.out.println("=== Escolha 4 Cartas de ATAQUE ===");
+        exibirCatalogo("ataque");
+        for(int i = 0; i < 4; i++) {
+            int indiceCarta;
+            while (true) {
+                System.out.println("Escolha a " + (i + 1) + "° carta: ");
+                indiceCarta = scanner.nextInt();
+                if (indiceCarta < 0 || indiceCarta > catalogoDeAtaque.size()) {
+                    System.out.println("ERRO! Escolha novamente!");
+                    continue;
+                }
+
+                String cartaAtual = Partida.catalogoDeAtaque.get(indiceCarta).getNome();
+
+                boolean repetido = false;
+                for (int j = 0; j < hacker.getDeck().getCartasAtaque().size(); j++) {
+                    if (cartaAtual == hacker.getDeck().getCartasAtaque().get(j).getNome()) {
+                        repetido = true;
+                        break;
+                    }
+                }
+                if (repetido) {
+                    System.out.println("CARTA REPETIDA! Escolha novamente!");
+                    continue;
+                }
+                break;
+            }
+        //adicionar as cartas no deck
+        deck.addAtaque(Partida.catalogoDeAtaque.get(indiceCarta));
+        }
+
+        System.out.println("=== Escolha 4 Cartas de DEFESA ===");
+        exibirCatalogo("defesa");
+
+        for (int i = 0; i < 4; i++) {
+            int indiceCarta;
+
+            while (true) {
+                System.out.println("Escolha a " + (i + 1) + "° carta: ");
+                indiceCarta = scanner.nextInt();
+                if (indiceCarta < 0 || indiceCarta > catalogoDeDefesa.size()) {
+                    System.out.println("ERRO! Escolha novamente!");
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
+        System.out.println("=== Escolha 2 Cartas de SUPORTE ===");
+        exibirCatalogo("suporte");
+
+        for (int i = 0; i < 2; i++) {
+            int indiceCarta;
+
+            while (true) {
+                System.out.println("Escolha a " + (i + 1) + "° carta: ");
+                indiceCarta = scanner.nextInt();
+                if (indiceCarta < 0 || indiceCarta > catalogoDeSuporte.size()) {
+                    System.out.println("ERRO! Escolha novamente!");
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
+    }
 
 
     public static void prepararDeck(Hacker hacker, Scanner sc) {
@@ -149,6 +193,7 @@ public class Partida {
 
     public static void iniciarPartida() {
         Scanner scanner = new Scanner(System.in);
+        Partida.carregarCartas(); //ja carrega no inicio da partida
 
         while (true) {
             System.out.println("""
@@ -176,7 +221,8 @@ public class Partida {
                 Hacker hacker1 = new Hacker(nome1, matricula1);
                 Hacker hacker2 = new Hacker(nome2, matricula2);
 
-                Partida.carregarCartas();
+                escolherCartas(hacker1);
+
 
             } else if (escolha.equals("2")) {
                 // Informações básicas do Hacker 1
