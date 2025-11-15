@@ -124,7 +124,7 @@ public class Partida {
             while (true) {
                 System.out.println("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
-                if (indiceCarta < 0 || indiceCarta > catalogoDeAtaque.size()) {
+                if (indiceCarta < 0 || indiceCarta >= catalogoDeAtaque.size()) {
                     System.out.println("ERRO! Escolha novamente!");
                     continue;
                 }
@@ -157,7 +157,7 @@ public class Partida {
             while (true) {
                 System.out.println("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
-                if (indiceCarta < 0 || indiceCarta > catalogoDeDefesa.size()) {
+                if (indiceCarta < 0 || indiceCarta >= catalogoDeDefesa.size()) {
                     System.out.println("ERRO! Escolha novamente!");
                 }
                 else {
@@ -175,7 +175,7 @@ public class Partida {
             while (true) {
                 System.out.println("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
-                if (indiceCarta < 0 || indiceCarta > catalogoDeSuporte.size()) {
+                if (indiceCarta < 0 || indiceCarta >= catalogoDeSuporte.size()) {
                     System.out.println("ERRO! Escolha novamente!");
                 }
                 else {
@@ -222,6 +222,7 @@ public class Partida {
                 Hacker hacker2 = new Hacker(nome2, matricula2);
 
                 escolherCartas(hacker1);
+                escolherCartas(hacker2);
 
 
             } else if (escolha.equals("2")) {
@@ -245,7 +246,31 @@ public class Partida {
         }
     }
 
-    public static void iniciarTurnos() {
+    public static void iniciarDuelo(Hacker hacker1, Hacker hacker2) {
+        boolean h1Comeca = true;
 
+        while (hacker1.getHp() > 0 && hacker2.getHp() > 0) {
+            System.out.println("--- NOVO TURNO ---");
+            // hackers escolhem quais cartas jogar
+            Hacker primeiroAJogar;
+            Hacker segundoAJogar;
+
+            if (h1Comeca) {
+                primeiroAJogar = hacker1;
+                segundoAJogar = hacker2;
+            } else {
+                primeiroAJogar = hacker2;
+                segundoAJogar = hacker1;
+            }
+
+            primeiroAJogar.jogarCarta();
+            segundoAJogar.jogarCarta();
+
+            // Calcular dano, cura, etc.
+
+            // recarregar energia, arredondar vida, etc.
+
+            h1Comeca = !h1Comeca;
+        }
     }
 }
