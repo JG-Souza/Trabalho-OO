@@ -2,6 +2,7 @@ package equipe404.rpg.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Deck {
     private ArrayList <CartaAtaque> cartasAtaque;
@@ -60,5 +61,21 @@ public class Deck {
         for(CartaSuporte cSuporte : cartasSuporte) {
             System.out.println(cSuporte + " ");
         }
+    }
+
+    public int getTamanhoDeck() {
+        return cartasAtaque.size() + cartasDefesa.size() + cartasSuporte.size();
+    }
+
+    //---DECK COMPLETO---
+
+    public List<Carta> montaDeckCompleto() {
+        List<Carta> deck = new ArrayList<>();
+
+        deck.addAll(this.cartasAtaque);
+        deck.addAll(this.cartasDefesa);
+        deck.addAll(this.cartasSuporte);
+
+        return deck;
     }
 }

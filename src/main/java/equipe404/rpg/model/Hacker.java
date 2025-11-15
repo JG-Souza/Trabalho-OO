@@ -1,5 +1,7 @@
 package equipe404.rpg.model;
 
+import java.util.List;
+
 public class Hacker {
     private String nome;
     private String matricula;
@@ -30,4 +32,20 @@ public class Hacker {
     public void imprime() {
         System.out.println("Este é o Hacker " + this.nome);
     }
+
+    //O usuario devera visualizar suas cartas e seus custos
+    //Caso selecione uma carta que não tenha energia imprimir "Mana insuficiente"
+    //Ter a opção de passar a vez e a opção de entregar o sistema
+    //Descartar as cartas escolhidas do deck do jogador
+    //Apos a escolha o metodo retornará uma lista de cartas selecionadas
+
+    public List<Carta> jogarCarta(){
+
+        System.out.println("=== Suas cartas ===");
+        for(int i = 0; i < this.deck.getTamanhoDeck(); i++){
+
+        }
+    }
+
+
 }
