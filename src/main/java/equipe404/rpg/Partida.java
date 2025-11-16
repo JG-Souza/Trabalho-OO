@@ -161,6 +161,7 @@ public class Partida {
                     System.out.println("ERRO! Escolha novamente!");
                 }
                 else {
+                    deck.addDefesa(Partida.catalogoDeDefesa.get(indiceCarta));
                     break;
                 }
             }
@@ -179,8 +180,10 @@ public class Partida {
                     System.out.println("ERRO! Escolha novamente!");
                 }
                 else {
+                    deck.addSuporte(Partida.catalogoDeSuporte.get(indiceCarta));
                     break;
                 }
+
             }
         }
 
@@ -223,6 +226,7 @@ public class Partida {
 
                 escolherCartas(hacker1);
                 escolherCartas(hacker2);
+                Partida.iniciarDuelo(hacker1, hacker2);
 
 
             } else if (escolha.equals("2")) {
@@ -248,7 +252,7 @@ public class Partida {
 
     public static void iniciarDuelo(Hacker hacker1, Hacker hacker2) {
         boolean h1Comeca = true;
-
+        Scanner scannerDuelo = new Scanner(System.in);
         while (hacker1.getHp() > 0 && hacker2.getHp() > 0) {
             System.out.println("--- NOVO TURNO ---");
             // hackers escolhem quais cartas jogar

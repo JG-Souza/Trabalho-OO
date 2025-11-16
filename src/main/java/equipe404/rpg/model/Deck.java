@@ -63,10 +63,6 @@ public class Deck {
         }
     }
 
-    public int getTamanhoDeck() {
-        return cartasAtaque.size() + cartasDefesa.size() + cartasSuporte.size();
-    }
-
     //---DECK COMPLETO---
 
     public List<Carta> montaDeckCompleto() {
@@ -75,7 +71,10 @@ public class Deck {
         deck.addAll(this.cartasAtaque);
         deck.addAll(this.cartasDefesa);
         deck.addAll(this.cartasSuporte);
-
         return deck;
+    }
+
+    public int getTamanhoDeck() {
+        return montaDeckCompleto().size();
     }
 }

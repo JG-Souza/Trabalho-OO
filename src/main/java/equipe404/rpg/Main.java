@@ -6,4 +6,5 @@ public class Main {
     static void main() {
         Partida.iniciarPartida();
     }
+
 }
