@@ -27,11 +27,11 @@ public class Hacker {
 
     public int getMana() {return this.mana;}
 
-    public void setMana(int mana) {
-        if (mana > 10) {
+    public void setMana(int newMana) {
+        if (newMana > 10) {
             this.mana = 10;
         } else {
-            this.mana = mana;
+            this.mana = newMana;
         }
     }
 
@@ -64,7 +64,6 @@ public class Hacker {
         }
 
         boolean passarVez = false;
-        int energiaGasta = 0;
         List<Carta> cartasEscolhidas = new ArrayList<>();
 
         while(!passarVez){
@@ -80,8 +79,6 @@ public class Hacker {
                 continue;
             }
 
-            int energiaRestante = this.getMana() - energiaGasta;
-
             //se escolheu indice inválido
             if (indiceEscolhido < 1 || indiceEscolhido > cartasDisponiveis.size()){
                 System.out.println("Opção inválida. Digite um valor válido!");
@@ -90,13 +87,14 @@ public class Hacker {
 
             Carta cartaSelecionada = cartasDisponiveis.get(indiceEscolhido - 1);
 
+
             //se escolher a carta certa vai custar a energia e adicionar as cartas escolhidas
-            if (cartaSelecionada.getCusto() <= energiaRestante){
+            if (cartaSelecionada.getCusto() <= this.getMana()){
                 cartasEscolhidas.add(cartaSelecionada);
-                energiaGasta += cartaSelecionada.getCusto();
+                int energiaRestante = this.getMana() - cartaSelecionada.getCusto();
                 deck.removeCarta(cartaSelecionada);
-                System.out.println("Carta '" + indiceEscolhido + "' Selecionada. Energia restante: " + (this.getMana() - energiaGasta));
-                this.setMana(this.getMana() - energiaGasta);
+                System.out.println("Carta '" + indiceEscolhido + "' Selecionada. Energia restante: " + energiaRestante);
+                this.setMana(energiaRestante);
             } else {
                 System.out.println("Mana insuficiente!");
             }

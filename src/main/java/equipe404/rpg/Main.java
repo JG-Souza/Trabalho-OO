@@ -86,7 +86,7 @@ public class Main {
                     continue;
                 }
 
-                String cartaAtual = GerenciadorCartas.catalogoDeAtaque.get(indiceCarta).getNome();
+                String cartaAtual = GerenciadorCartas.catalogoDeAtaque.get(indiceCarta - 1).getNome();
 
                 boolean repetido = false;
                 for (int j = 0; j < hacker.getDeck().getCartasAtaque().size(); j++) {
@@ -102,45 +102,71 @@ public class Main {
                 break;
             }
             //adicionar as cartas no deck
-            deck.addAtaque(GerenciadorCartas.catalogoDeAtaque.get(indiceCarta));
+            deck.addAtaque(GerenciadorCartas.catalogoDeAtaque.get(indiceCarta - 1));
         }
 
         System.out.println("\n=== Escolha 4 Cartas de DEFESA ===");
         GerenciadorCartas.exibirCatalogo("defesa");
 
-        for (int i = 0; i < 4; i++) {
+        for(int i = 0; i < 4; i++) {
             int indiceCarta;
-
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
                 if (indiceCarta < 0 || indiceCarta >= GerenciadorCartas.catalogoDeDefesa.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
+                    continue;
                 }
-                else {
-                    deck.addDefesa(GerenciadorCartas.catalogoDeDefesa.get(indiceCarta));
-                    break;
+
+                String cartaAtual = GerenciadorCartas.catalogoDeDefesa.get(indiceCarta - 1).getNome();
+
+                boolean repetido = false;
+                for (int j = 0; j < hacker.getDeck().getCartasDefesa().size(); j++) {
+                    if (cartaAtual == hacker.getDeck().getCartasDefesa().get(j).getNome()) {
+                        repetido = true;
+                        break;
+                    }
                 }
+                if (repetido) {
+                    System.out.println("CARTA REPETIDA! Escolha novamente!");
+                    continue;
+                }
+                break;
             }
+            //adicionar as cartas no deck
+            deck.addDefesa(GerenciadorCartas.catalogoDeDefesa.get(indiceCarta - 1));
         }
 
         System.out.println("\n=== Escolha 2 Cartas de SUPORTE ===");
         GerenciadorCartas.exibirCatalogo("suporte");
 
-        for (int i = 0; i < 2; i++) {
+        for(int i = 0; i < 2; i++) {
             int indiceCarta;
-
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
                 if (indiceCarta < 0 || indiceCarta >= GerenciadorCartas.catalogoDeSuporte.size()) {
-                    System.out.println("ERRO! Esse índice não está nas opçõese!");
+                    System.out.println("ERRO! Esse índice não está nas opções!");
+                    continue;
                 }
-                else {
-                    deck.addSuporte(GerenciadorCartas.catalogoDeSuporte.get(indiceCarta));
-                    break;
+
+                String cartaAtual = GerenciadorCartas.catalogoDeSuporte.get(indiceCarta - 1).getNome();
+
+                boolean repetido = false;
+                for (int j = 0; j < hacker.getDeck().getCartasSuporte().size(); j++) {
+                    if (cartaAtual == hacker.getDeck().getCartasSuporte().get(j).getNome()) {
+                        repetido = true;
+                        break;
+                    }
                 }
+                if (repetido) {
+                    System.out.println("CARTA REPETIDA! Escolha novamente!");
+                    continue;
+                }
+                break;
             }
+            //adicionar as cartas no deck
+            deck.addSuporte(GerenciadorCartas.catalogoDeSuporte.get(indiceCarta - 1));
         }
     }
 
