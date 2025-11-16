@@ -52,8 +52,8 @@ public class Hacker {
     public List<Carta> jogarCarta(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=== Seu estado ===\n");
-        System.out.println("HP: " + this.hp + " | " + "ENERGIA: " + this.mana);
+        System.out.println("=== Estado do hacker " + this.getNome() + " ===\n");
+        System.out.println("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana());
 
         System.out.println("=== Suas cartas ===");
         List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
@@ -94,13 +94,14 @@ public class Hacker {
             if (cartaSelecionada.getCusto() <= energiaRestante){
                 cartasEscolhidas.add(cartaSelecionada);
                 energiaGasta += cartaSelecionada.getCusto();
+                deck.removeCarta(cartaSelecionada);
                 System.out.println("Carta '" + indiceEscolhido + "' Selecionada. Energia restante: " + (this.getMana() - energiaGasta));
             } else {
                 System.out.println("Mana insuficiente!");
             }
         }
 
-        //ainda falta implementar o metodo de entregar o sistema e as cartas serem removida
+        //ainda falta implementar o metodo de entregar o sistema e as cartas selecionadas serem removidas
         return cartasEscolhidas;
     }
 

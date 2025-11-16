@@ -77,4 +77,18 @@ public class Deck {
     public int getTamanhoDeck() {
         return montaDeckCompleto().size();
     }
+
+    //remove as cartas que foram escolhidas
+    public void removeCarta(Carta cartaSelecionada){
+        String tipo = cartaSelecionada.getTipo();
+        if(tipo.equals("ataque")){
+            cartasAtaque.remove(cartaSelecionada);
+        }
+        if(tipo.equals("defesa")){
+            cartasDefesa.remove(cartaSelecionada);
+        }
+        if(tipo.equals("suporte")){
+            cartasSuporte.remove(cartaSelecionada);
+        }
+    }
 }
