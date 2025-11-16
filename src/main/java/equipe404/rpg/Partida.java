@@ -1,4 +1,5 @@
 package equipe404.rpg;
+import java.util.List;
 import java.util.Scanner;
 
 import equipe404.rpg.model.*;
@@ -15,6 +16,10 @@ public class Partida {
         this.h1Comeca = true;
     }
 
+
+    public void aplicarEfeitos (Hacker jogador, Hacker oponente, List <Carta> cartasJogadas) {
+
+    }
 
     public void iniciar() {
         Scanner scannerDuelo = new Scanner(System.in);

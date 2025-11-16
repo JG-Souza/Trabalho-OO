@@ -68,7 +68,7 @@ public class Hacker {
 
         while(!passarVez){
             System.out.println("\nEscolha sua carta. Caso queira passar a vez digite 0");
-
+            int energiaRestante = this.getMana();
             //pede o usuario para escolher a carta
             int indiceEscolhido;
             indiceEscolhido = scanner.nextInt();
@@ -89,9 +89,14 @@ public class Hacker {
 
 
             //se escolher a carta certa vai custar a energia e adicionar as cartas escolhidas
-            if (cartaSelecionada.getCusto() <= this.getMana()){
+            if(energiaRestante == 0) {
+                System.out.println("Mana insuficiente para uma nova jogada! Passando a vez para o outro jogador.");
+                passarVez = true;
+                continue;
+            }
+            else if (cartaSelecionada.getCusto() <= this.getMana()){
                 cartasEscolhidas.add(cartaSelecionada);
-                int energiaRestante = this.getMana() - cartaSelecionada.getCusto();
+                energiaRestante = this.getMana() - cartaSelecionada.getCusto();
                 deck.removeCarta(cartaSelecionada);
                 System.out.println("Carta '" + indiceEscolhido + "' Selecionada. Energia restante: " + energiaRestante);
                 this.setMana(energiaRestante);
