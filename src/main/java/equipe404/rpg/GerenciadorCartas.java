@@ -80,25 +80,22 @@ public class GerenciadorCartas {
     }
 
 
-    private static void imprimirListaEmColunas(List<? extends Carta> lista) {
-        final int COLUNAS = 2;
-        final String FORMATO_COLUNA = "%-40s"; // 35 caracteres de largura
+    private static void imprimirListaEmColunas(List<? extends Carta> lista) { // Permite que qualquer subclasse de Carta seja passada como parametro
+        int colunas = 2;
+        String formatacao = "%-50s";
 
-        if (lista.isEmpty()) {
-            System.out.println("Nenhuma carta disponível.");
-            return;
-        }
-
+        // Monta a string da carta de acordo com o molde
         for (int i = 0; i < lista.size(); i++) {
             Carta carta = lista.get(i);
-            String infoCarta = String.format("[%d] %s (Custo: %d)",
+            String infoCarta = String.format("[%d] %s (Custo: %d)", // Determina o molde
                     (i + 1),
                     carta.getNome(),
                     carta.getCusto());
 
-            System.out.printf(FORMATO_COLUNA, infoCarta);
+            System.out.printf(formatacao, infoCarta); // Não pula linha por padrão
 
-            if ((i + 1) % COLUNAS == 0 || i == lista.size() - 1) {
+            // Determina quando pular a linha
+            if ((i + 1) % colunas == 0 || i == lista.size() - 1) {
                 System.out.println();
             }
         }
