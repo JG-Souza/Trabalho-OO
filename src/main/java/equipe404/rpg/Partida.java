@@ -18,7 +18,7 @@ public class Partida {
     }
 
 
-    public void aplicarEfeitos (Hacker jogador, Hacker oponente, List <Carta> cartasJogadas){
+    public void aplicarEfeitos (Hacker jogador, List <Carta> cartasJogadas){
         double ataqueTotal = 0;
         double defesaTotal = 0;
         double poderSuporte = 0;
@@ -50,15 +50,17 @@ public class Partida {
             }
         }
 
-        double danoFinal = ataqueTotal - defesaTotal;
+        jogador.setAtaqueTurno(ataqueTotal);
+        jogador.setDefesaTurno(defesaTotal);
 
-        oponente.setHp(oponente.getHp() - (int)danoFinal);
+        //arredondar ataqueFinal
+        ataqueTotal = Math.round(ataqueTotal * 100.0) / 100.0;
 
-        System.out.println("\n>>> RESULTADOS DO TURNO");
+        System.out.println("\n>>> RESULTADOS DO TURNO DO " + jogador.getNome());
         System.out.println("ATAQUE TOTAL: " + ataqueTotal);
         System.out.println("DEFESA TOTAL: " + defesaTotal);
-        System.out.println("DANO TOTAL: " + danoFinal);
-        System.out.println("HP RESTANTE DE " + oponente.getNome() + ": " + oponente.getHp());
+        //System.out.println("DANO TOTAL: " + danoFinal);
+        //System.out.println("HP RESTANTE DE " + oponente.getNome() + ": " + oponente.getHp());
     }
 
     public void consolidarVida (Hacker h) {
@@ -99,8 +101,26 @@ public class Partida {
             }
 
             // Calcular dano, cura, etc.
-            aplicarEfeitos(primeiroAJogar, segundoAJogar, jogadasDoPrimeiro);
-            aplicarEfeitos(segundoAJogar, primeiroAJogar, jogadasDoSegundo);
+            aplicarEfeitos(primeiroAJogar, jogadasDoPrimeiro);
+            aplicarEfeitos(segundoAJogar, jogadasDoSegundo);
+
+
+            //calcular dano
+            int danoEm2 = (int)(primeiroAJogar.getAtaqueTurno() - segundoAJogar.getDefesaTurno());
+            if(danoEm2 < 0) danoEm2 = 0;
+
+            int danoEm1 = (int)(segundoAJogar.getAtaqueTurno() - primeiroAJogar.getDefesaTurno());
+            if (danoEm1 < 0) danoEm1 = 0;
+
+            primeiroAJogar.setHp(primeiroAJogar.getHp() - danoEm1);
+            segundoAJogar.setHp((segundoAJogar.getHp()) - danoEm2);
+
+            System.out.println("\n===== RESULTADOS DO TURNO =====");
+            System.out.println(primeiroAJogar.getNome() + " causou " + danoEm2 + " de dano.");
+            System.out.println(segundoAJogar.getNome() + " causou " + danoEm1 + " de dano.");
+            System.out.println(primeiroAJogar.getNome() + " HP: " + primeiroAJogar.getHp());
+            System.out.println(segundoAJogar.getNome() + " HP: " + segundoAJogar.getHp());
+
             // recarregar energia, arredondar vida, etc.
             consolidarVida(primeiroAJogar);
             consolidarVida(segundoAJogar);

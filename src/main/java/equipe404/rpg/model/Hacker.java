@@ -10,6 +10,8 @@ public class Hacker {
     private int hp;
     private int mana;
     private Deck deck;
+    private double ataqueTurno;
+    private double defesaTurno;
 
     public Hacker(String nome, String matricula) {
         this.nome = nome;
@@ -27,6 +29,17 @@ public class Hacker {
 
     public void setHp (int novoHp) {
         this.hp = novoHp;
+    }
+
+    public double getAtaqueTurno() {return this.ataqueTurno;};
+    public double getDefesaTurno() {return this.defesaTurno;};
+
+    public void setAtaqueTurno (double novoAtaqueTurno) {
+        this.ataqueTurno = novoAtaqueTurno;
+    }
+
+    public void setDefesaTurno (double novaDefesaTurno) {
+        this.defesaTurno = novaDefesaTurno;
     }
 
     public int getMana() {return this.mana;}
