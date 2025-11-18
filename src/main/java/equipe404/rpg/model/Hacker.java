@@ -25,6 +25,10 @@ public class Hacker {
 
     public int getHp() {return this.hp;}
 
+    public void setHp (int novoHp) {
+        this.hp = novoHp;
+    }
+
     public int getMana() {return this.mana;}
 
     public void setMana(int newMana) {
