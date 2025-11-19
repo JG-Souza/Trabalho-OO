@@ -2,6 +2,7 @@ package equipe404.rpg.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Hacker {
@@ -196,7 +197,87 @@ public class Hacker {
     }
 
     public List<Carta> jogarCartaBot () {
+        System.out.println("\n=== Estado do BOT " + this.getNome() + " ===");
+        System.out.println("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
 
+        List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
+
+        if (cartasDisponiveis.size() == 0){
+            System.out.println("--- Deck vazio! Repondo deck... ---");
+
+            this.deck = this.deckCopia.copiaDeck();
+            //recarrega as cartas disponiveis
+            cartasDisponiveis = deck.montaDeckCompleto();
+        }
+
+        System.out.println("=== Cartas do BOT ===");
+        for (int i = 0; i < cartasDisponiveis.size(); i++) {
+            Carta c = cartasDisponiveis.get(i);
+            System.out.println((i + 1) + ". " + c.getNome() + " - Custo: " + c.getCusto() + " - Tipo: " + c.getTipo());
+        }
+
+        List<Carta> cartasEscolhidas = new ArrayList<>();
+        int energiaRestante = this.getMana();
+
+        while (energiaRestante > 0) {
+            Random r = new Random();
+
+            int indice = r.nextInt(cartasDisponiveis.size());
+
+            Carta cartaSelecionada = cartasDisponiveis.get(indice);
+
+            boolean repetido = false;
+
+            //verifica se a cara selecionada é igual a alguma ja escolhida antes
+            for(int i = 0; i < cartasEscolhidas.size(); i++){
+                if (cartaSelecionada == cartasEscolhidas.get(i)){
+                    repetido = true;
+                    break;
+                }
+            }
+            if(repetido) continue;
+
+            if (cartaSelecionada.getCusto() > energiaRestante) continue;
+
+            cartasEscolhidas.add(cartaSelecionada);
+            energiaRestante = this.getMana() - cartaSelecionada.getCusto();
+            this.setMana(energiaRestante);
+
+            String detalhe = "";
+
+            if (cartaSelecionada instanceof CartaAtaque) {
+                CartaAtaque c = (CartaAtaque) cartaSelecionada;
+                detalhe = "ATAQUE: " + c.getPoderAtaque();
+            }
+
+            else if (cartaSelecionada instanceof CartaDefesa) {
+                CartaDefesa c = (CartaDefesa) cartaSelecionada;
+                detalhe = "DEFESA: " + c.getPoderDefesa();
+            }
+
+            else if (cartaSelecionada instanceof CartaSuporte) {
+                CartaSuporte c = (CartaSuporte) cartaSelecionada;
+                if (c.getEfeito().equals("AUMENTA_ATAQUE")) {
+                    detalhe = "AUMENTA " + c.getPoderModificador() + " NO ATAQUE DO JOGADOR";
+                }
+                else if (c.getEfeito().equals("DIMINUI_ATAQUE")) {
+                    detalhe = "DIMINUI " + c.getPoderModificador() + " NO ATAQUE DO JOGADOR";
+                }
+                else if (c.getEfeito().equals("AUMENTA_VIDA")) {
+                    detalhe = "AUMENTA " + c.getPoderModificador() + " NA VIDA DO JOGADOR";
+                }
+            }
+
+            System.out.println("=============================");
+            System.out.println("✔ Carta selecionada: " + cartaSelecionada.getNome());
+            System.out.println("  [" + detalhe + "]");
+            System.out.println("  Energia restante: " + energiaRestante);
+            System.out.println("=============================");
+        }
+        deck.removeCarta(cartasEscolhidas);
+        this.setMana(this.getMana() + 1);
+
+        return cartasEscolhidas;
     }
 
 }

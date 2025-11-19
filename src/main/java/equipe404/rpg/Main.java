@@ -3,6 +3,7 @@ package equipe404.rpg;
 import equipe404.rpg.model.Deck;
 import equipe404.rpg.model.Hacker;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -38,19 +39,14 @@ public class Main {
 
 
             } else if (escolha.equals("2")) {
-                // Informações básicas do Hacker 1
-                System.out.println("Digite o nome do Hacker 1");
-                String nomeHacker = scanner.nextLine();
-                System.out.println("Digite a matricula do Hacker 1");
-                String matriculaHacker = scanner.nextLine();
+                Hacker h1 = criarJogadorHumano(scanner, 1);
+                Hacker h2 = criarJogadorBot(2);
 
-                // Informações do Bot são fixas
-                String nomeBot = "BOT";
-                String matriculaBot = "202565001";
+                escolherCartas(h1);
+                escolherCartasBot(h2);
 
-                // Instanciação dos Hackers
-                Hacker hacker1 = new Hacker(nomeHacker, matriculaHacker);
-                Hacker bot = new Hacker(nomeBot, matriculaBot);
+                Partida novaPartida = new Partida(h1, h2);
+                novaPartida.iniciar();
 
             } else if (escolha.equals("3")) {
                 break;
@@ -181,5 +177,72 @@ public class Main {
         System.out.print("Digite a matricula: ");
         String matricula = scanner.nextLine();
         return new Hacker(nome, matricula);
+    }
+
+    private static Hacker criarJogadorBot (int numeroJogador) {
+        return new Hacker ("BOT", "202565001");
+    }
+
+    public static void escolherCartasBot(Hacker bot) {
+
+        Deck deck = bot.getDeck();
+
+        Random r = new Random();
+
+        for(int i = 0; i < 4; i++) {
+            int indiceAtaque;
+            while(true) {
+                indiceAtaque = r.nextInt(GerenciadorCartas.catalogoDeAtaque.size());
+                String cartaAtual = GerenciadorCartas.catalogoDeAtaque.get(indiceAtaque).getNome();
+
+                boolean repetido = false;
+                for(int j = 0; j < bot.getDeck().getCartasAtaque().size(); j++) {
+                    if (bot.getDeck().getCartasAtaque().get(j).getNome().equals(cartaAtual)) {
+                        repetido = true;
+                        break;
+                    }
+                }
+                if(!repetido) break; //se nao for repetido ==> carta valida, sai do while
+            }
+            deck.addAtaque(GerenciadorCartas.catalogoDeAtaque.get(indiceAtaque));
+        }
+
+        for(int i = 0; i < 4; i++) {
+            int indiceDefesa;
+            while(true) {
+                indiceDefesa = r.nextInt(GerenciadorCartas.catalogoDeDefesa.size());
+                String cartaAtual = GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa).getNome();
+
+                boolean repetido = false;
+                for(int j = 0; j < bot.getDeck().getCartasDefesa().size(); j++) {
+                    if (bot.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
+                        repetido = true;
+                        break;
+                    }
+                }
+                if(!repetido) break; //se nao for repetido ==> carta valida, sai do while
+            }
+            deck.addDefesa(GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa));
+        }
+
+        for(int i = 0; i < 4; i++) {
+            int indiceSuporte;
+            while(true) {
+                indiceSuporte = r.nextInt(GerenciadorCartas.catalogoDeSuporte.size());
+                String cartaAtual = GerenciadorCartas.catalogoDeSuporte.get(indiceSuporte).getNome();
+
+                boolean repetido = false;
+                for(int j = 0; j < bot.getDeck().getCartasDefesa().size(); j++) {
+                    if (bot.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
+                        repetido = true;
+                        break;
+                    }
+                }
+                if(!repetido) break; //se nao for repetido ==> carta valida, sai do while
+            }
+            deck.addSuporte(GerenciadorCartas.catalogoDeSuporte.get(indiceSuporte));
+        }
+        Deck copia = bot.getDeck().copiaDeck();
+        bot.setDeckCopia(copia);
     }
 }
