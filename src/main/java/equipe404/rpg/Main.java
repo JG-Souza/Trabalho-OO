@@ -81,7 +81,7 @@ public class Main {
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
-                if (indiceCarta < 0 || indiceCarta >= GerenciadorCartas.catalogoDeAtaque.size()) {
+                if (indiceCarta < 0 || indiceCarta > GerenciadorCartas.catalogoDeAtaque.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
                     continue;
                 }
@@ -113,7 +113,7 @@ public class Main {
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
-                if (indiceCarta < 0 || indiceCarta >= GerenciadorCartas.catalogoDeDefesa.size()) {
+                if (indiceCarta < 0 || indiceCarta > GerenciadorCartas.catalogoDeDefesa.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
                     continue;
                 }
@@ -145,7 +145,7 @@ public class Main {
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
                 indiceCarta = scanner.nextInt();
-                if (indiceCarta < 0 || indiceCarta >= GerenciadorCartas.catalogoDeSuporte.size()) {
+                if (indiceCarta < 0 || indiceCarta > GerenciadorCartas.catalogoDeSuporte.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
                     continue;
                 }

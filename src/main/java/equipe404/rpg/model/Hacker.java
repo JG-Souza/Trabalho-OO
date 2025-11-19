@@ -13,6 +13,7 @@ public class Hacker {
     private Deck deckCopia;
     private double ataqueTurno;
     private double defesaTurno;
+    private double efeitoNegativoTurno;
 
     public Hacker(String nome, String matricula) {
         this.nome = nome;
@@ -34,6 +35,7 @@ public class Hacker {
 
     public double getAtaqueTurno() {return this.ataqueTurno;};
     public double getDefesaTurno() {return this.defesaTurno;};
+    public double getEfeitoNegativoTurno() { return this.efeitoNegativoTurno; };
 
     public void setAtaqueTurno (double novoAtaqueTurno) {
         this.ataqueTurno = novoAtaqueTurno;
@@ -41,6 +43,10 @@ public class Hacker {
 
     public void setDefesaTurno (double novaDefesaTurno) {
         this.defesaTurno = novaDefesaTurno;
+    }
+
+    public void setEfeitoNegativoTurno (double novoEfeitoNegativoTurno) {
+        this.efeitoNegativoTurno = novoEfeitoNegativoTurno;
     }
 
     public int getMana() {return this.mana;}

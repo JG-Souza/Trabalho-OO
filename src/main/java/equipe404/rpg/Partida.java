@@ -18,10 +18,12 @@ public class Partida {
     }
 
 
-    public void aplicarEfeitos (Hacker jogador, List <Carta> cartasJogadas){
+    public void aplicarEfeitos (Hacker jogador, Hacker oponente, List <Carta> cartasJogadas){
         double ataqueTotal = 0;
         double defesaTotal = 0;
         double poderSuporte = 0;
+        double poderSuporteTotal = 0;
+        double efeitoNegativo = 0;
 
 
         for (Carta c:  cartasJogadas) {
@@ -40,8 +42,8 @@ public class Partida {
                 CartaSuporte sup = (CartaSuporte) c;
                 poderSuporte = sup.getPoderModificador();
 
-                if (sup.getEfeito().equals("AUMENTA_ATAQUE")) ataqueTotal += poderSuporte;
-                if (sup.getEfeito().equals("DIMINUI_ATAQUE")) ataqueTotal -= poderSuporte;
+                if (sup.getEfeito().equals("AUMENTA_ATAQUE")) poderSuporteTotal += poderSuporte;
+                if (sup.getEfeito().equals("DIMINUI_ATAQUE")) efeitoNegativo += poderSuporte;
                 if (sup.getEfeito().equals("AUMENTA_VIDA")) {
                     //pode passar de 100 temporariamente no turno quando jogar essa carta de aumentar vida
                     int novoHp = jogador.getHp() + (int)poderSuporte;
@@ -50,8 +52,21 @@ public class Partida {
             }
         }
 
+        if (poderSuporteTotal > 0) {
+            ataqueTotal *= (1 + poderSuporteTotal);
+        }
+
+        double debuffSofrido = jogador.getEfeitoNegativoTurno();
+
+        if (debuffSofrido > 0) {
+            ataqueTotal *= (1 - debuffSofrido);
+        }
+
         jogador.setAtaqueTurno(ataqueTotal);
         jogador.setDefesaTurno(defesaTotal);
+        if (efeitoNegativo > 0) {
+            oponente.setEfeitoNegativoTurno(efeitoNegativo);
+        }
 
         //arredondar ataqueFinal
         ataqueTotal = Math.round(ataqueTotal * 100.0) / 100.0;
@@ -113,8 +128,8 @@ public class Partida {
             }
 
             // Calcular dano, cura, etc.
-            aplicarEfeitos(primeiroAJogar, jogadasDoPrimeiro);
-            aplicarEfeitos(segundoAJogar, jogadasDoSegundo);
+            aplicarEfeitos(primeiroAJogar, segundoAJogar, jogadasDoPrimeiro);
+            aplicarEfeitos(segundoAJogar, primeiroAJogar, jogadasDoSegundo);
 
 
             //calcular dano
