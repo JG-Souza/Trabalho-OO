@@ -46,6 +46,19 @@ public class Deck {
         Collections.shuffle(cartasSuporte);
     }
 
+    //--CLONA DECK
+
+    public Deck copiaDeck(){
+        Deck deckCopia = new Deck();
+        //cria novo deck com as cartas do deck original
+        deckCopia.cartasAtaque.addAll(this.cartasAtaque);
+        deckCopia.cartasDefesa.addAll(this.cartasDefesa);
+        deckCopia.cartasSuporte.addAll(this.cartasSuporte);
+
+        return deckCopia;
+    }
+
+
     public void imprimirCartas() {
         System.out.println("Cartas de ATAQUE: ");
         for(CartaAtaque cAtaque : cartasAtaque) {
@@ -79,16 +92,17 @@ public class Deck {
     }
 
     //remove as cartas que foram escolhidas
-    public void removeCarta(Carta cartaSelecionada){
-        String tipo = cartaSelecionada.getTipo();
-        if(tipo.equals("ataque")){
-            cartasAtaque.remove(cartaSelecionada);
-        }
-        if(tipo.equals("defesa")){
-            cartasDefesa.remove(cartaSelecionada);
-        }
-        if(tipo.equals("suporte")){
-            cartasSuporte.remove(cartaSelecionada);
+    public void removeCarta(List<Carta>cartasSelecionada){
+        for(int i = 0; i < cartasSelecionada.size(); i++) {
+            if (cartasSelecionada.get(i).getTipo().equals("ataque")) {
+                cartasAtaque.remove(cartasSelecionada.get(i));
+            }
+            if (cartasSelecionada.get(i).getTipo().equals("defesa")) {
+                cartasDefesa.remove(cartasSelecionada.get(i));
+            }
+            if (cartasSelecionada.get(i).getTipo().equals("suporte")) {
+                cartasSuporte.remove(cartasSelecionada.get(i));
+            }
         }
     }
 }

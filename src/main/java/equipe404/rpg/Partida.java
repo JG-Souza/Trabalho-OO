@@ -93,11 +93,23 @@ public class Partida {
             System.out.println("É a vez de: " + primeiroAJogar.getNome());
             List <Carta> jogadasDoPrimeiro = primeiroAJogar.jogarCarta();
 
+            if(jogadasDoPrimeiro == null){
+                System.out.println("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n" +
+                        "=== O JOGADOR " + this.hacker2.getNome() + " VENCEU A PARTIDA! ===\n");
+                break;
+            }
+
             // Evita que o segundo jogador ataque depois de morto
             List <Carta> jogadasDoSegundo = new ArrayList<>();
             if (segundoAJogar.getHp() > 0) {
                 System.out.println("É a vez de: " + segundoAJogar.getNome());
                 jogadasDoSegundo = segundoAJogar.jogarCarta();
+
+                if(jogadasDoSegundo == null){
+                    System.out.println("\nO jogador " + this.hacker2.getNome() + " entregou o sistema!\n" +
+                            "=== O JOGADOR " + this.hacker1.getNome() + " VENCEU A PARTIDA! ===\n");
+                    break;
+                }
             }
 
             // Calcular dano, cura, etc.

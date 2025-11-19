@@ -168,6 +168,9 @@ public class Main {
             //adicionar as cartas no deck
             deck.addSuporte(GerenciadorCartas.catalogoDeSuporte.get(indiceCarta - 1));
         }
+        //Cria o objeto que copia o deck atual e dps atribui a deckCopia
+        Deck copia = hacker.getDeck().copiaDeck();
+        hacker.setDeckCopia(copia);
     }
 
 

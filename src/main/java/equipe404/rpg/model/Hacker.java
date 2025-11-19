@@ -10,6 +10,7 @@ public class Hacker {
     private int hp;
     private int mana;
     private Deck deck;
+    private Deck deckCopia;
     private double ataqueTurno;
     private double defesaTurno;
 
@@ -54,7 +55,9 @@ public class Hacker {
 
     public Deck getDeck() {return this.deck;}
 
-
+    public void setDeckCopia(Deck deck) {
+        this.deckCopia = deck;
+    }
 
     public void imprime() {
         System.out.println("Este é o Hacker " + this.nome);
@@ -75,6 +78,14 @@ public class Hacker {
         System.out.println("=== Suas cartas ===");
         List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
 
+        if (cartasDisponiveis.size() == 0){
+            System.out.println("--- Deck vazio! Repondo deck... ---");
+
+            this.deck = this.deckCopia.copiaDeck();
+            //recarrega as cartas disponiveis
+            cartasDisponiveis = deck.montaDeckCompleto();
+        }
+
         for(int i = 0; i < this.deck.getTamanhoDeck(); i++){
             System.out.println((i + 1) + ". " + cartasDisponiveis.get(i).getNome() + " - Custo: " +
                     cartasDisponiveis.get(i).getCusto() + " - Tipo: " + cartasDisponiveis.get(i).getTipo()) ;
@@ -84,7 +95,8 @@ public class Hacker {
         List<Carta> cartasEscolhidas = new ArrayList<>();
 
         while(!passarVez){
-            System.out.println("\nEscolha sua carta. Caso queira passar a vez digite 0");
+            System.out.println("\n               --- Escolha sua carta. ---\nPara passar a vez digite 0 | Para encerrar" +
+                    " o sistema digite -1 ");
             int energiaRestante = this.getMana();
             //pede o usuario para escolher a carta
             int indiceEscolhido;
@@ -96,6 +108,11 @@ public class Hacker {
                 continue;
             }
 
+            if(indiceEscolhido == -1){
+                this.setHp(0);
+                return null;
+            }
+
             //se escolheu indice inválido
             if (indiceEscolhido < 1 || indiceEscolhido > cartasDisponiveis.size()){
                 System.out.println("Opção inválida. Digite um valor válido!");
@@ -104,6 +121,19 @@ public class Hacker {
 
             Carta cartaSelecionada = cartasDisponiveis.get(indiceEscolhido - 1);
 
+            boolean repetido = false;
+
+            //verifica se a cara selecionada é igual a alguma ja escolhida antes
+            for(int i = 0; i < cartasEscolhidas.size(); i++){
+                if (cartaSelecionada == cartasEscolhidas.get(i)){
+                    repetido = true;
+                    break;
+                }
+            }
+            if(repetido){
+                System.out.println("CARTA JA SELECIONADA! Escolha novamente!");
+                continue;
+            }
 
             //se escolher a carta certa vai custar a energia e adicionar as cartas escolhidas
             if(energiaRestante == 0) {
@@ -114,13 +144,13 @@ public class Hacker {
             else if (cartaSelecionada.getCusto() <= this.getMana()){
                 cartasEscolhidas.add(cartaSelecionada);
                 energiaRestante = this.getMana() - cartaSelecionada.getCusto();
-                deck.removeCarta(cartaSelecionada);
                 System.out.println("Carta '" + indiceEscolhido + "' Selecionada. Energia restante: " + energiaRestante);
                 this.setMana(energiaRestante);
             } else {
                 System.out.println("Mana insuficiente!");
             }
         }
+        deck.removeCarta(cartasEscolhidas);
         this.setMana(this.getMana()+1);
         //ainda falta implementar o metodo de entregar o sistema
         return cartasEscolhidas;
