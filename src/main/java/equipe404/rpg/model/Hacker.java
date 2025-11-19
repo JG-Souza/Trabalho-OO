@@ -150,7 +150,40 @@ public class Hacker {
             else if (cartaSelecionada.getCusto() <= this.getMana()){
                 cartasEscolhidas.add(cartaSelecionada);
                 energiaRestante = this.getMana() - cartaSelecionada.getCusto();
-                System.out.println("Carta '" + indiceEscolhido + "' Selecionada. Energia restante: " + energiaRestante);
+
+                String detalhe = "";
+
+                if (cartaSelecionada instanceof CartaAtaque) {
+                    CartaAtaque c = (CartaAtaque) cartaSelecionada;
+                    detalhe = "ATAQUE: " + c.getPoderAtaque();
+                }
+
+                else if (cartaSelecionada instanceof CartaDefesa) {
+                    CartaDefesa c = (CartaDefesa) cartaSelecionada;
+                    detalhe = "DEFESA: " + c.getPoderDefesa();
+                }
+
+                else if (cartaSelecionada instanceof CartaSuporte) {
+                    CartaSuporte c = (CartaSuporte) cartaSelecionada;
+                    if (c.getEfeito().equals("AUMENTA_ATAQUE")) {
+                        detalhe = "AUMENTA " + c.getPoderModificador() + " NO ATAQUE DO JOGADOR";
+                    }
+                    else if (c.getEfeito().equals("DIMINUI_ATAQUE")) {
+                        detalhe = "DIMINUI " + c.getPoderModificador() + " NO ATAQUE DO JOGADOR";
+                    }
+                    else if (c.getEfeito().equals("AUMENTA_VIDA")) {
+                        detalhe = "AUMENTA " + c.getPoderModificador() + " NA VIDA DO JOGADOR";
+                    }
+                }
+
+                System.out.println("=============================");
+                System.out.println("✔ Carta selecionada: " + cartaSelecionada.getNome());
+                System.out.println("  [" + detalhe + "]");
+                System.out.println("  Energia restante: " + energiaRestante);
+                System.out.println("=============================");
+
+
+
                 this.setMana(energiaRestante);
             } else {
                 System.out.println("Mana insuficiente!");
@@ -162,5 +195,8 @@ public class Hacker {
         return cartasEscolhidas;
     }
 
+    public List<Carta> jogarCartaBot () {
+
+    }
 
 }
