@@ -107,8 +107,15 @@ public class Hacker {
             int energiaRestante = this.getMana();
             //pede o usuario para escolher a carta
             int indiceEscolhido;
-            indiceEscolhido = scanner.nextInt();
-
+            if (scanner.hasNextInt()) {
+                indiceEscolhido = scanner.nextInt();
+                scanner.nextLine();
+            } else {
+                System.out.println("Entrada inválida. Por favor, digite o número do índice. Tente novamente.");
+                //limpa a entrada se não da loop infinito
+                scanner.nextLine();
+                continue;
+            }
             //se escolher 0 passa a vez e vai sair do while
             if (indiceEscolhido == 0){
                 passarVez = true;
@@ -192,12 +199,11 @@ public class Hacker {
         }
         deck.removeCarta(cartasEscolhidas);
         this.setMana(this.getMana()+1);
-        //ainda falta implementar o metodo de entregar o sistema
         return cartasEscolhidas;
     }
 
     public List<Carta> jogarCartaBot () {
-        System.out.println("\n=== Estado do BOT " + this.getNome() + " ===");
+        System.out.println("\n=== Estado do BOT " + " ===");
         System.out.println("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
 
         List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
@@ -218,8 +224,24 @@ public class Hacker {
 
         List<Carta> cartasEscolhidas = new ArrayList<>();
         int energiaRestante = this.getMana();
+        boolean passarVez = false;
 
-        while (energiaRestante > 0) {
+        while (energiaRestante > 0 || cartasEscolhidas.size() < 2 || !passarVez) {
+            for(int j = 0; j < cartasDisponiveis.size(); j++){
+                if(cartasDisponiveis.get(j).getCusto() < energiaRestante){
+                    passarVez = true;
+                    break;
+                }
+            }
+
+            if (energiaRestante == 0){
+                passarVez = true;
+                break;
+            }
+
+            if (!passarVez){
+                break;
+            }
             Random r = new Random();
 
             int indice = r.nextInt(cartasDisponiveis.size());

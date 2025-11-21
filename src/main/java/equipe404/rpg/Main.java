@@ -76,7 +76,16 @@ public class Main {
             int indiceCarta;
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
-                indiceCarta = scanner.nextInt();
+                if (scanner.hasNextInt()) {
+                    indiceCarta = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("ENTRADA INVÁLIDA. Por favor, digite o número do índice. Tente novamente.");
+                    //limpa a entrada se não da loop infinito
+                    scanner.nextLine();
+                    continue;
+                }
+
                 if (indiceCarta < 0 || indiceCarta > GerenciadorCartas.catalogoDeAtaque.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
                     continue;
@@ -108,7 +117,16 @@ public class Main {
             int indiceCarta;
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
-                indiceCarta = scanner.nextInt();
+                if (scanner.hasNextInt()) {
+                    indiceCarta = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("ENTRADA INVÁLIDA. Por favor, digite o número do índice. Tente novamente.");
+                    //limpa a entrada se não da loop infinito
+                    scanner.nextLine();
+                    continue;
+                }
+
                 if (indiceCarta < 0 || indiceCarta > GerenciadorCartas.catalogoDeDefesa.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
                     continue;
@@ -140,7 +158,16 @@ public class Main {
             int indiceCarta;
             while (true) {
                 System.out.print("Escolha a " + (i + 1) + "° carta: ");
-                indiceCarta = scanner.nextInt();
+                if (scanner.hasNextInt()) {
+                    indiceCarta = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("ENTRADA INVÁLIDA. Por favor, digite o número do índice. Tente novamente.");
+                    //limpa a entrada se não da loop infinito
+                    scanner.nextLine();
+                    continue;
+                }
+
                 if (indiceCarta < 0 || indiceCarta > GerenciadorCartas.catalogoDeSuporte.size()) {
                     System.out.println("ERRO! Esse índice não está nas opções!");
                     continue;
@@ -225,7 +252,7 @@ public class Main {
             deck.addDefesa(GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa));
         }
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 2; i++) {
             int indiceSuporte;
             while(true) {
                 indiceSuporte = r.nextInt(GerenciadorCartas.catalogoDeSuporte.size());
