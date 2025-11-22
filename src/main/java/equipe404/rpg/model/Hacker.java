@@ -225,7 +225,7 @@ public class Hacker {
         List<Carta> cartasEscolhidas = new ArrayList<>();
         int energiaRestante = this.getMana();
 
-        while (energiaRestante > 0) {
+        while (energiaRestante > 0 || cartasEscolhidas.size() < 2) {
 
             boolean passarVez = false;
             for(int j = 0; j < cartasDisponiveis.size(); j++){
@@ -235,7 +235,6 @@ public class Hacker {
                 }
             }
             if (!passarVez){
-                System.out.println("passou a vez");
                 break;
             }
             Random r = new Random();

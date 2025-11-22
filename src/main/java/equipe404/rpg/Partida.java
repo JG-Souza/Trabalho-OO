@@ -105,7 +105,7 @@ public class Partida {
             Hacker primeiroAJogar = (h1Comeca) ? hacker1 : hacker2;
             Hacker segundoAJogar = (h1Comeca) ? hacker2 : hacker1;
 
-            System.out.println("É a vez de: " + primeiroAJogar.getNome());
+            System.out.println("\nÉ a vez de: " + primeiroAJogar.getNome());
             List <Carta> jogadasDoPrimeiro = (primeiroAJogar.getNome().equals("BOT")) ? primeiroAJogar.jogarCartaBot() : primeiroAJogar.jogarCarta();
 
             if(jogadasDoPrimeiro == null){
@@ -117,7 +117,7 @@ public class Partida {
             // Evita que o segundo jogador ataque depois de morto
             List <Carta> jogadasDoSegundo = new ArrayList<>();
             if (segundoAJogar.getHp() > 0) {
-                System.out.println("É a vez de: " + segundoAJogar.getNome());
+                System.out.println("\nÉ a vez de: " + segundoAJogar.getNome());
                 jogadasDoSegundo = (segundoAJogar.getNome().equals("BOT")) ? segundoAJogar.jogarCartaBot() : segundoAJogar.jogarCarta();
 
                 if(jogadasDoSegundo == null){

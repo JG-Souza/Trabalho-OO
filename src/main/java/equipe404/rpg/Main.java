@@ -29,9 +29,33 @@ public class Main {
                 Hacker h1 = criarJogadorHumano(scanner, 1);
                 Hacker h2 = criarJogadorHumano(scanner, 2);
 
-                // Eles escolhem as cartass
-                escolherCartas(h1);
-                escolherCartas(h2);
+                System.out.println("\n" + h1.getNome() + " escolha sua opção de montagem de deck:");
+                System.out.println("1. Montar deck manualmente");
+                System.out.println("2. Usar deck aleatório");
+                System.out.print("Escolha uma opção: ");
+                String opcaoDeck1 = scanner.nextLine();
+
+                // Eles escolhem as cartas
+                if (opcaoDeck1.equals("1")){
+                    escolherCartas(h1);
+                } else if (opcaoDeck1.equals("2")){
+                    escolherCartasAleatorio(h1);
+                } else {
+                    System.out.println("Opção inválida. Tente novamente.");
+                }
+
+                System.out.println("\n" + h2.getNome() + " escolha sua opção de montagem de deck:");
+                System.out.println("1. Montar deck manualmente");
+                System.out.println("2. Usar deck aleatório");
+                System.out.print("Escolha uma opção: ");
+                String opcaoDeck2 = scanner.nextLine();
+                if(opcaoDeck2.equals("1")) {
+                    escolherCartas(h2);
+                } else if (opcaoDeck1.equals("2")){
+                    escolherCartasAleatorio(h2);
+                } else {
+                    System.out.println("Opção inválida. Tente novamente.");
+                }
 
                 // Cria e inicia a partida
                 Partida novaPartida = new Partida(h1, h2);
@@ -42,8 +66,21 @@ public class Main {
                 Hacker h1 = criarJogadorHumano(scanner, 1);
                 Hacker h2 = criarJogadorBot(2);
 
-                escolherCartas(h1);
-                escolherCartasBot(h2);
+                System.out.println("\n" + h1.getNome() + " escolha sua opção de montagem de deck:");
+                System.out.println("1. Montar deck manualmente");
+                System.out.println("2. Usar deck aleatório");
+                System.out.print("Escolha uma opção: ");
+                String opcaoDeck1 = scanner.nextLine();
+
+                // Eles escolhem as cartas
+                if (opcaoDeck1.equals("1")){
+                    escolherCartas(h1);
+                } else if (opcaoDeck1.equals("2")){
+                    escolherCartasAleatorio(h1);
+                } else {
+                    System.out.println("Opção inválida. Tente novamente.");
+                }
+                escolherCartasAleatorio(h2);
 
                 Partida novaPartida = new Partida(h1, h2);
                 novaPartida.iniciar();
@@ -210,9 +247,9 @@ public class Main {
         return new Hacker ("BOT", "202565001");
     }
 
-    public static void escolherCartasBot(Hacker bot) {
+    public static void escolherCartasAleatorio(Hacker hacker) {
 
-        Deck deck = bot.getDeck();
+        Deck deck = hacker.getDeck();
 
         Random r = new Random();
 
@@ -223,8 +260,8 @@ public class Main {
                 String cartaAtual = GerenciadorCartas.catalogoDeAtaque.get(indiceAtaque).getNome();
 
                 boolean repetido = false;
-                for(int j = 0; j < bot.getDeck().getCartasAtaque().size(); j++) {
-                    if (bot.getDeck().getCartasAtaque().get(j).getNome().equals(cartaAtual)) {
+                for(int j = 0; j < hacker.getDeck().getCartasAtaque().size(); j++) {
+                    if (hacker.getDeck().getCartasAtaque().get(j).getNome().equals(cartaAtual)) {
                         repetido = true;
                         break;
                     }
@@ -241,8 +278,8 @@ public class Main {
                 String cartaAtual = GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa).getNome();
 
                 boolean repetido = false;
-                for(int j = 0; j < bot.getDeck().getCartasDefesa().size(); j++) {
-                    if (bot.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
+                for(int j = 0; j < hacker.getDeck().getCartasDefesa().size(); j++) {
+                    if (hacker.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
                         repetido = true;
                         break;
                     }
@@ -259,8 +296,8 @@ public class Main {
                 String cartaAtual = GerenciadorCartas.catalogoDeSuporte.get(indiceSuporte).getNome();
 
                 boolean repetido = false;
-                for(int j = 0; j < bot.getDeck().getCartasDefesa().size(); j++) {
-                    if (bot.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
+                for(int j = 0; j < hacker.getDeck().getCartasDefesa().size(); j++) {
+                    if (hacker.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
                         repetido = true;
                         break;
                     }
@@ -269,7 +306,9 @@ public class Main {
             }
             deck.addSuporte(GerenciadorCartas.catalogoDeSuporte.get(indiceSuporte));
         }
-        Deck copia = bot.getDeck().copiaDeck();
-        bot.setDeckCopia(copia);
+        Deck copia = hacker.getDeck().copiaDeck();
+        hacker.setDeckCopia(copia);
     }
+
+
 }
