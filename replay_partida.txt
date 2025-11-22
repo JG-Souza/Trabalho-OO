@@ -1,2 +1,8 @@
-Inicio do Jogo Cyber Duel
+=== Inicio do Jogo Cyber Duel ===
+A partida será entre Humano x Humano
+=== Jogador 1 ===
+Nome: JG
+
+=== Jogador 2 ===
+Nome: Tom
 Fim

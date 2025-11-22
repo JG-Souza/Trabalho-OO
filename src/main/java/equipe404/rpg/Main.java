@@ -15,7 +15,7 @@ public class Main {
     public static void exibirMenu() {
         Scanner scanner = new Scanner(System.in);
         GerenciadorReplay replay = new GerenciadorReplay();
-        replay.registrar("Inicio do Jogo Cyber Duel");
+        replay.registrar("=== Inicio do Jogo Cyber Duel ===");
 
         while (true) {
             System.out.println("A partida será entre:");
@@ -27,9 +27,12 @@ public class Main {
 
             // Humano x Humano
             if (escolha.equals("1")) {
+                replay.registrar("A partida será entre Humano x Humano");
                 // Cria os jogadores
                 Hacker h1 = criarJogadorHumano(scanner, 1);
                 Hacker h2 = criarJogadorHumano(scanner, 2);
+
+                replay.registrar("=== Jogador 1 ===\nNome: " + h1.getNome() + "\n\n=== Jogador 2 ===\nNome: " + h2.getNome());
 
                 System.out.println("\n" + h1.getNome() + " escolha sua opção de montagem de deck:");
                 System.out.println("1. Montar deck manualmente");
