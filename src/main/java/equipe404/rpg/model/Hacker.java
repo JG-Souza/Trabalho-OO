@@ -1,5 +1,6 @@
 package equipe404.rpg.model;
 
+import equipe404.rpg.GerenciadorReplay;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -76,17 +77,22 @@ public class Hacker {
     //Descartar as cartas escolhidas do deck do jogador
     //Apos a escolha o metodo retornará uma lista de cartas selecionadass
 
-    public List<Carta> jogarCarta(){
+    public List<Carta> jogarCarta(GerenciadorReplay replay){
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\n=== Estado do hacker " + this.getNome() + " ===");
         System.out.println("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
 
+        replay.registrar("\n=== Estado do hacker " + this.getNome() + " ===");
+        replay.registrar("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
+
         System.out.println("=== Suas cartas ===");
+        replay.registrar("=== Suas cartas ===");
         List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
 
         if (cartasDisponiveis.size() == 0){
             System.out.println("--- Deck vazio! Repondo deck... ---");
+            replay.registrar("--- Deck vazio! Repondo deck... ---");
 
             this.deck = this.deckCopia.copiaDeck();
             //recarrega as cartas disponiveis
@@ -119,10 +125,12 @@ public class Hacker {
             //se escolher 0 passa a vez e vai sair do while
             if (indiceEscolhido == 0){
                 passarVez = true;
+                replay.registrar(this.nome + " passou a vez.");
                 continue;
             }
 
             if(indiceEscolhido == -1){
+                replay.registrar(this.nome + " entregou o sistema");
                 this.setHp(0);
                 return null;
             }
@@ -152,6 +160,7 @@ public class Hacker {
             //se escolher a carta certa vai custar a energia e adicionar as cartas escolhidas
             if(energiaRestante == 0) {
                 System.out.println("Mana insuficiente para uma nova jogada! Passando a vez para o outro jogador.");
+                replay.registrar(this.nome + " sem mana. Vez passada.");
                 passarVez = true;
                 continue;
             }
@@ -164,11 +173,15 @@ public class Hacker {
                 if (cartaSelecionada instanceof CartaAtaque) {
                     CartaAtaque c = (CartaAtaque) cartaSelecionada;
                     detalhe = "ATAQUE: " + c.getPoderAtaque();
+                    replay.registrar(this.nome + " selecionou " + cartaSelecionada.getNome() + " (Custo: " +
+                            cartaSelecionada.getCusto() + ") - Tipo: ATAQUE - Poder: " + c.getPoderAtaque());
                 }
 
                 else if (cartaSelecionada instanceof CartaDefesa) {
                     CartaDefesa c = (CartaDefesa) cartaSelecionada;
                     detalhe = "DEFESA: " + c.getPoderDefesa();
+                    replay.registrar(this.nome + " selecionou " + cartaSelecionada.getNome() + " (Custo: " +
+                            cartaSelecionada.getCusto() + ") - Tipo: DEFESA - Poder: " + c.getPoderDefesa());
                 }
 
                 else if (cartaSelecionada instanceof CartaSuporte) {
@@ -182,6 +195,8 @@ public class Hacker {
                     else if (c.getEfeito().equals("AUMENTA_VIDA")) {
                         detalhe = "AUMENTA " + c.getPoderModificador() + " NA VIDA DO JOGADOR";
                     }
+                    replay.registrar(this.nome + " selecionou " + cartaSelecionada.getNome() + " (Custo: " +
+                            cartaSelecionada.getCusto() + ") - Tipo: SUPORTE - Poder: " + c.getPoderModificador());
                 }
 
                 System.out.println("=============================");
@@ -190,7 +205,7 @@ public class Hacker {
                 System.out.println("  Energia restante: " + energiaRestante);
                 System.out.println("=============================");
 
-
+                replay.registrar("Energia restante: " + energiaRestante);
 
                 this.setMana(energiaRestante);
             } else {
@@ -202,15 +217,17 @@ public class Hacker {
         return cartasEscolhidas;
     }
 
-    public List<Carta> jogarCartaBot () {
-        System.out.println("\n=== Estado do BOT " + " ===");
+    public List<Carta> jogarCartaBot (GerenciadorReplay replay) {
+        System.out.println("\n=== Estado do BOT  ===");
         System.out.println("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
+        replay.registrar("\n=== Estado do hacker do BOT ===");
+        replay.registrar("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
 
         List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
 
         if (cartasDisponiveis.size() == 0){
             System.out.println("--- Deck vazio! Repondo deck... ---");
-
+            replay.registrar("--- Deck vazio! Repondo deck... ---");
             this.deck = this.deckCopia.copiaDeck();
             //recarrega as cartas disponiveis
             cartasDisponiveis = deck.montaDeckCompleto();
@@ -231,6 +248,7 @@ public class Hacker {
             for(int j = 0; j < cartasDisponiveis.size(); j++){
                 if(cartasDisponiveis.get(j).getCusto() < energiaRestante){
                     passarVez = true;
+                    replay.registrar(this.nome + " passou a vez.");
                     break;
                 }
             }
@@ -260,16 +278,21 @@ public class Hacker {
             energiaRestante = this.getMana() - cartaSelecionada.getCusto();
             this.setMana(energiaRestante);
 
+
             String detalhe = "";
 
             if (cartaSelecionada instanceof CartaAtaque) {
                 CartaAtaque c = (CartaAtaque) cartaSelecionada;
                 detalhe = "ATAQUE: " + c.getPoderAtaque();
+                replay.registrar(this.nome + " selecionou " + cartaSelecionada.getNome() + " (Custo: " +
+                        cartaSelecionada.getCusto() + ") - Tipo: ATAQUE - Poder: " + c.getPoderAtaque());
             }
 
             else if (cartaSelecionada instanceof CartaDefesa) {
                 CartaDefesa c = (CartaDefesa) cartaSelecionada;
                 detalhe = "DEFESA: " + c.getPoderDefesa();
+                replay.registrar(this.nome + " selecionou " + cartaSelecionada.getNome() + " (Custo: " +
+                        cartaSelecionada.getCusto() + ") - Tipo: DEFESA - Poder: " + c.getPoderDefesa());
             }
 
             else if (cartaSelecionada instanceof CartaSuporte) {
@@ -283,6 +306,8 @@ public class Hacker {
                 else if (c.getEfeito().equals("AUMENTA_VIDA")) {
                     detalhe = "AUMENTA " + c.getPoderModificador() + " NA VIDA DO JOGADOR";
                 }
+                replay.registrar(this.nome + " selecionou " + cartaSelecionada.getNome() + " (Custo: " +
+                        cartaSelecionada.getCusto() + ") - Tipo: SUPORTE - Poder: " + c.getPoderModificador());
             }
 
             System.out.println("=============================");
@@ -290,6 +315,9 @@ public class Hacker {
             System.out.println("  [" + detalhe + "]");
             System.out.println("  Energia restante: " + energiaRestante);
             System.out.println("=============================");
+
+            replay.registrar("Energia restante: " + energiaRestante);
+            replay.registrar("Mana restante: " + energiaRestante);
         }
         deck.removeCarta(cartasEscolhidas);
         this.setMana(this.getMana() + 1);

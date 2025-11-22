@@ -1,8 +1,71 @@
 === Inicio do Jogo Cyber Duel ===
-A partida será entre Humano x Humano
+A partida será entre Humano x BOT
 === Jogador 1 ===
-Nome: JG
+Nome: bieljg
 
 === Jogador 2 ===
-Nome: Tom
-Fim
+Nome: BOT
+
+--- Escolhas de decks ---
+
+Escolhas jogador 1
+O jogador bieljg usou um deck aleatório
+Carta aleatória escolhida: Explosão de Payload
+Carta aleatória escolhida: Desconfiguracao
+Carta aleatória escolhida: DNS Spoofing
+Carta aleatória escolhida: Script Kiddie Tool
+Carta aleatória escolhida: Modo Seguro
+Carta aleatória escolhida: Bloqueio de Script
+Carta aleatória escolhida: Verificação de Integridade de Memória
+Carta aleatória escolhida: Reforço de Permissões
+Carta aleatória escolhida: Verificação de Integridade de Memória
+Carta aleatória escolhida: Firewall Hiperescala
+
+Escolhas do bot
+BOT gerou deck aleatório.
+Carta aleatória escolhida: Botnet Massiva
+Carta aleatória escolhida: Comprometimento de Firmware
+Carta aleatória escolhida: Ataque de Mineração
+Carta aleatória escolhida: Backdoor Corporativo
+Carta aleatória escolhida: Reforço de Permissões
+Carta aleatória escolhida: Monitoramento de Pacotes Profundo
+Carta aleatória escolhida: Escudo de Dados Corporativo
+Carta aleatória escolhida: Proteção Anti-DDoS
+Carta aleatória escolhida: Proteção por Assinatura
+Carta aleatória escolhida: Proteção de Núcleo
+==========================================
+ INÍCIO DA PARTIDA: bieljg vs BOT
+==========================================
+
+--- TURNO ---
+
+É a vez de: 
+
+=== Estado do hacker bieljg ===
+HP: 100 | ENERGIA: 10
+
+=== Suas cartas ===
+bieljg selecionou Ping de Teste (Custo: 1) - Tipo: ATAQUE - Poder: 10
+Energia restante: 9
+bieljg passou a vez.
+
+=== Estado do hacker do BOT ===
+HP: 100 | ENERGIA: 10
+
+BOT passou a vez.
+BOT selecionou Força Quântica (Custo: 5) - Tipo: ATAQUE - Poder: 50
+Energia restante: 5
+Mana restante: 5
+BOT passou a vez.
+BOT selecionou Explosão de Payload (Custo: 5) - Tipo: ATAQUE - Poder: 50
+Energia restante: 0
+Mana restante: 0
+--- Resultado do turno bieljg ---
+Ataque Final: 10.0 | Defesa Final: 0.0
+--- Resultado do turno BOT ---
+Ataque Final: 100.0 | Defesa Final: 0.0
+RESULTADO TURNO:
+bieljg causou 10 de dano.
+BOT causou 100 de dano.
+STATUS ATUAL -> bieljg: 0 HP (10 Mana) | BOT: 90 HP (1 Mana)
+Usuário optou por salvar o replay.

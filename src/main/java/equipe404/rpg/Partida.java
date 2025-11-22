@@ -10,11 +10,13 @@ public class Partida {
     private Hacker hacker1;
     private Hacker hacker2;
     private boolean h1Comeca;
+    private GerenciadorReplay replay;
 
-    public Partida(Hacker hacker1, Hacker hacker2) {
+    public Partida(Hacker hacker1, Hacker hacker2, GerenciadorReplay replay) {
         this.hacker1 = hacker1;
         this.hacker2 = hacker2;
         this.h1Comeca = true;
+        this.replay = replay;
     }
 
 
@@ -42,24 +44,33 @@ public class Partida {
                 CartaSuporte sup = (CartaSuporte) c;
                 poderSuporte = sup.getPoderModificador();
 
-                if (sup.getEfeito().equals("AUMENTA_ATAQUE")) poderSuporteTotal += poderSuporte;
-                if (sup.getEfeito().equals("DIMINUI_ATAQUE")) efeitoNegativo += poderSuporte;
+                if (sup.getEfeito().equals("AUMENTA_ATAQUE")){
+                    poderSuporteTotal += poderSuporte;
+                    replay.registrar(jogador.getNome() + " ativou suporte: Aumenta ataque em " + poderSuporte);
+                }
+                if (sup.getEfeito().equals("DIMINUI_ATAQUE")){
+                    efeitoNegativo += poderSuporte;
+                    replay.registrar(jogador.getNome() + " ativou suporte: Diminui ataque do oponente em " + poderSuporte);
+                }
                 if (sup.getEfeito().equals("AUMENTA_VIDA")) {
                     //pode passar de 100 temporariamente no turno quando jogar essa carta de aumentar vida
                     int novoHp = jogador.getHp() + (int)poderSuporte;
                     jogador.setHp(novoHp);
+                    replay.registrar(jogador.getNome() + " recuperou " + (int)poderSuporte + " de vida.");
                 }
             }
         }
 
         if (poderSuporteTotal > 0) {
             ataqueTotal *= (1 + poderSuporteTotal);
+            replay.registrar("Bônus de ataque aplicado: +" + (poderSuporteTotal * 100) + "%");
         }
 
         double debuffSofrido = jogador.getEfeitoNegativoTurno();
 
         if (debuffSofrido > 0) {
             ataqueTotal *= (1 - debuffSofrido);
+            replay.registrar("Debuff sofrido: Ataque reduzido em " + (debuffSofrido * 100) + "%");
         }
 
         jogador.setAtaqueTurno(ataqueTotal);
@@ -76,6 +87,9 @@ public class Partida {
         System.out.println("DEFESA TOTAL: " + defesaTotal);
         //System.out.println("DANO TOTAL: " + danoFinal);
         //System.out.println("HP RESTANTE DE " + oponente.getNome() + ": " + oponente.getHp());
+
+        replay.registrar("--- Resultado do turno " + jogador.getNome() + " ---");
+        replay.registrar("Ataque Final: " + ataqueTotal + " | Defesa Final: " + defesaTotal);
     }
 
     public void consolidarVida (Hacker h) {
@@ -99,17 +113,25 @@ public class Partida {
         System.out.println(hacker1.getNome() + " VS " + hacker2.getNome());
         System.out.println("=====================================");
 
+        replay.registrar("==========================================");
+        replay.registrar(" INÍCIO DA PARTIDA: " + hacker1.getNome() + " vs " + hacker2.getNome());
+        replay.registrar("==========================================");
+
         while (hacker1.getHp() > 0 && hacker2.getHp() > 0) {
             System.out.println("--- NOVO TURNO ---");
-
+            replay.registrar("\n--- TURNO ---");
             Hacker primeiroAJogar = (h1Comeca) ? hacker1 : hacker2;
             Hacker segundoAJogar = (h1Comeca) ? hacker2 : hacker1;
 
             System.out.println("\nÉ a vez de: " + primeiroAJogar.getNome());
-            List <Carta> jogadasDoPrimeiro = (primeiroAJogar.getNome().equals("BOT")) ? primeiroAJogar.jogarCartaBot() : primeiroAJogar.jogarCarta();
+            replay.registrar("\nÉ a vez de: ");
+            List <Carta> jogadasDoPrimeiro = (primeiroAJogar.getNome().equals("BOT")) ? primeiroAJogar.jogarCartaBot(replay) : primeiroAJogar.jogarCarta(replay);
 
             if(jogadasDoPrimeiro == null){
                 System.out.println("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n" +
+                        "=== O JOGADOR " + this.hacker2.getNome() + " VENCEU A PARTIDA! ===\n");
+
+                replay.registrar("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n" +
                         "=== O JOGADOR " + this.hacker2.getNome() + " VENCEU A PARTIDA! ===\n");
                 break;
             }
@@ -118,10 +140,13 @@ public class Partida {
             List <Carta> jogadasDoSegundo = new ArrayList<>();
             if (segundoAJogar.getHp() > 0) {
                 System.out.println("\nÉ a vez de: " + segundoAJogar.getNome());
-                jogadasDoSegundo = (segundoAJogar.getNome().equals("BOT")) ? segundoAJogar.jogarCartaBot() : segundoAJogar.jogarCarta();
+                jogadasDoSegundo = (segundoAJogar.getNome().equals("BOT")) ? segundoAJogar.jogarCartaBot(replay) : segundoAJogar.jogarCarta(replay);
 
                 if(jogadasDoSegundo == null){
                     System.out.println("\nO jogador " + this.hacker2.getNome() + " entregou o sistema!\n" +
+                            "=== O JOGADOR " + this.hacker1.getNome() + " VENCEU A PARTIDA! ===\n");
+
+                    replay.registrar("\nO jogador " + this.hacker2.getNome() + " entregou o sistema!\n" +
                             "=== O JOGADOR " + this.hacker1.getNome() + " VENCEU A PARTIDA! ===\n");
                     break;
                 }
@@ -151,6 +176,12 @@ public class Partida {
             // recarregar energia, arredondar vida, etc.
             consolidarVida(primeiroAJogar);
             consolidarVida(segundoAJogar);
+
+            replay.registrar("RESULTADO TURNO:");
+            replay.registrar(primeiroAJogar.getNome() + " causou " + danoEm2 + " de dano.");
+            replay.registrar(segundoAJogar.getNome() + " causou " + danoEm1 + " de dano.");
+            replay.registrar("STATUS ATUAL -> " + hacker1.getNome() + ": " + hacker1.getHp() + " HP (" + hacker1.getMana() + " Mana) | " +
+                    hacker2.getNome() + ": " + hacker2.getHp() + " HP (" + hacker2.getMana() + " Mana)");
 
             h1Comeca = !h1Comeca;
         }
