@@ -93,9 +93,27 @@ public class Hacker {
             cartasDisponiveis = deck.montaDeckCompleto();
         }
 
-        for(int i = 0; i < this.deck.getTamanhoDeck(); i++){
-            System.out.println((i + 1) + ". " + cartasDisponiveis.get(i).getNome() + " - Custo: " +
-                    cartasDisponiveis.get(i).getCusto() + " - Tipo: " + cartasDisponiveis.get(i).getTipo()) ;
+        for(int i = 0; i < this.deck.getTamanhoDeck(); i++) {
+            String detalheCartas = "";
+            Carta carta = cartasDisponiveis.get(i);
+
+            if (carta instanceof CartaAtaque) {
+                detalheCartas = " - Poder: " + ((CartaAtaque) carta).getPoderAtaque();
+            } else if (carta instanceof CartaDefesa) {
+                detalheCartas = " - Poder: " + ((CartaDefesa) carta).getPoderDefesa();
+            } else if (carta instanceof CartaSuporte) {
+                CartaSuporte c = (CartaSuporte) carta;
+
+                if (c.getEfeito().equals("AUMENTA_ATAQUE")) {
+                    detalheCartas = " - Efeito: +" + c.getPoderModificador() + " Ataque";
+                } else if (c.getEfeito().equals("DIMINUI_ATAQUE")) {
+                    detalheCartas = " - Efeito: -" + c.getPoderModificador() + " Ataque";
+                } else if (c.getEfeito().equals("AUMENTA_VIDA")) {
+                    detalheCartas = " - Efeito: +" + c.getPoderModificador() + " Vida";
+                }
+            }
+            System.out.println((i + 1) + ". " + carta.getNome() + " - Custo: " +
+                    carta.getCusto() + " - Tipo: " + carta.getTipo() + detalheCartas);
         }
 
         boolean passarVez = false;
