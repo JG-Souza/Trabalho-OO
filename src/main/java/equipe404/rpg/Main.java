@@ -14,6 +14,8 @@ public class Main {
 
     public static void exibirMenu() {
         Scanner scanner = new Scanner(System.in);
+        GerenciadorReplay replay = new GerenciadorReplay();
+        replay.registrar("Inicio do Jogo Cyber Duel");
 
         while (true) {
             System.out.println("A partida será entre:");
@@ -60,6 +62,8 @@ public class Main {
                 // Cria e inicia a partida
                 Partida novaPartida = new Partida(h1, h2);
                 novaPartida.iniciar();
+                replay.registrar("Fim");
+                replay.gerarArquivoReplay();
 
 
             } else if (escolha.equals("2")) {
