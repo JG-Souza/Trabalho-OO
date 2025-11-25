@@ -86,10 +86,30 @@ public class GerenciadorCartas {
 
         // Monta a string da carta de acordo com o molde
         for (int i = 0; i < lista.size(); i++) {
+
+            String detalhe = "";
             Carta carta = lista.get(i);
-            String infoCarta = String.format("[%d] %s (Custo: %d)", // Determina o molde
+
+            if (carta instanceof CartaAtaque) {
+                detalhe = "Ataque: " + ((CartaAtaque) carta).getPoderAtaque();
+            } else if (carta instanceof CartaDefesa) {
+                detalhe = "Defesa: " + ((CartaDefesa) carta).getPoderDefesa();
+            } else if (carta instanceof CartaSuporte) {
+                CartaSuporte c = (CartaSuporte) carta;
+
+                if (c.getEfeito().equals("AUMENTA_ATAQUE")) {
+                    detalhe = "Buff: +" + c.getPoderModificador() + " Ataque";
+                } else if (c.getEfeito().equals("DIMINUI_ATAQUE")) {
+                    detalhe = "Debuff: -" + c.getPoderModificador() + " Ataque";
+                } else if (c.getEfeito().equals("AUMENTA_VIDA")) {
+                    detalhe = "Heal: +" + c.getPoderModificador() + " Vida";
+                }
+            }
+
+            String infoCarta = String.format("[%d] %s | %s | Custo: %d", // Determina o molde
                     (i + 1),
                     carta.getNome(),
+                    detalhe,
                     carta.getCusto());
 
             System.out.printf(formatacao, infoCarta); // Não pula linha por padrão

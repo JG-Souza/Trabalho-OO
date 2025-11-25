@@ -3,6 +3,7 @@ package equipe404.rpg;
 import equipe404.rpg.model.Deck;
 import equipe404.rpg.model.Hacker;
 
+ import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -51,7 +52,7 @@ public class Main {
                 String opcaoDeck2 = scanner.nextLine();
                 if(opcaoDeck2.equals("1")) {
                     escolherCartas(h2);
-                } else if (opcaoDeck1.equals("2")){
+                } else if (opcaoDeck2.equals("2")){
                     escolherCartasAleatorio(h2);
                 } else {
                     System.out.println("Opção inválida. Tente novamente.");
@@ -60,7 +61,8 @@ public class Main {
                 // Cria e inicia a partida
                 Partida novaPartida = new Partida(h1, h2);
                 novaPartida.iniciar();
-
+                verificarFimDeJogo(h1,h2);
+                break;
 
             } else if (escolha.equals("2")) {
                 Hacker h1 = criarJogadorHumano(scanner, 1);
@@ -84,6 +86,8 @@ public class Main {
 
                 Partida novaPartida = new Partida(h1, h2);
                 novaPartida.iniciar();
+                verificarFimDeJogo(h1,h2);
+                break;
 
             } else if (escolha.equals("3")) {
                 break;
@@ -296,8 +300,8 @@ public class Main {
                 String cartaAtual = GerenciadorCartas.catalogoDeSuporte.get(indiceSuporte).getNome();
 
                 boolean repetido = false;
-                for(int j = 0; j < hacker.getDeck().getCartasDefesa().size(); j++) {
-                    if (hacker.getDeck().getCartasDefesa().get(j).getNome().equals(cartaAtual)) {
+                for(int j = 0; j < hacker.getDeck().getCartasSuporte().size(); j++) {
+                    if (hacker.getDeck().getCartasSuporte().get(j).getNome().equals(cartaAtual)) {
                         repetido = true;
                         break;
                     }
@@ -310,5 +314,22 @@ public class Main {
         hacker.setDeckCopia(copia);
     }
 
+    public static boolean verificarFimDeJogo(Hacker h1, Hacker h2) {
+        if (h1.getHp() <= 0) {
+            System.out.println("\n====================");
+            System.out.println("☠ O SISTEMA DE " + h1.getNome() + "FOI INVADIDO! ☠");
+            System.out.println("🏅 VENCEDOR " + h2.getNome());
+            System.out.println("====================");
+            return true;
+        }
+        if (h2.getHp() <= 0) {
+            System.out.println("\n====================");
+            System.out.println("☠ O SISTEMA DE " + h2.getNome().toUpperCase(Locale.ROOT) + " FOI INVADIDO! ☠");
+            System.out.println("🏅 VENCEDOR " + h1.getNome());
+            System.out.println("====================");
+            return true;
+        }
+        return false;
+    }
 
 }
