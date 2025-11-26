@@ -87,7 +87,7 @@ public class Hacker {
         replay.registrar("HP: " + this.getHp() + " | " + "ENERGIA: " + this.getMana() + "\n");
 
         System.out.println("=== Suas cartas ===");
-        replay.registrar("=== Suas cartas ===");
+        replay.registrar("=== Jogada de " + this.getNome() + " ===");
         List<Carta> cartasDisponiveis = deck.montaDeckCompleto();
 
         if (cartasDisponiveis.size() == 0){

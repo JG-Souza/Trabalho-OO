@@ -113,7 +113,7 @@ public class Partida {
         System.out.println(hacker1.getNome() + " VS " + hacker2.getNome());
         System.out.println("=====================================");
 
-        replay.registrar("==========================================");
+        replay.registrar("\n==========================================");
         replay.registrar(" INÍCIO DA PARTIDA: " + hacker1.getNome() + " vs " + hacker2.getNome());
         replay.registrar("==========================================");
 
