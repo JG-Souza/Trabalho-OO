@@ -24,7 +24,7 @@ public class Main {
         System.out.println("--- REGRAS ---\n1. Escolha o modo de jogo (Versus humano ou bot)\n" +
                 "2. Escolha o Deck (Manual ou Aleatório)\n" +
                 "3. Escolha as Cartas que vão ser utilizadas na rodada\n" +
-                "4. O jogo termina se sua Vida chegar a zero\n");
+                "4. O jogo termina se sua vida chegar a zero\n");
         replay.registrar("=== Inicio do Jogo Cyber Duel ===");
 
         while (true) {
