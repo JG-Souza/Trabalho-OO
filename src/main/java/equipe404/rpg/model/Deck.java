@@ -39,13 +39,6 @@ public class Deck {
         return cartasSuporte;
     }
 
-    //---EMBARALHAR---
-    public void embaralhar() {
-        Collections.shuffle(cartasAtaque);
-        Collections.shuffle(cartasDefesa);
-        Collections.shuffle(cartasSuporte);
-    }
-
     //--CLONA DECK
 
     public Deck copiaDeck(){
