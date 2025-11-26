@@ -68,9 +68,6 @@ public class Main {
                 } else if (opcaoDeck2.equals("2")){
                     replay.registrar("\nO jogador "  + h2.getNome() + " optou usar um deck aleatório");
                     escolherCartasAleatorio(h2,replay);
-                    escolherCartas(h2);
-                } else if (opcaoDeck2.equals("2")){
-                    escolherCartasAleatorio(h2);
                 } else {
                     System.out.println("Opção inválida. Tente novamente.");
                 }
@@ -333,7 +330,7 @@ public class Main {
                 }
                 if(!repetido) break; //se nao for repetido ==> carta valida, sai do while
             }
-            replay.registrar("Carta aleatória escolhida: " + GerenciadorCartas.catalogoDeAtaque.get(indiceAtaque - 1).
+            replay.registrar("Carta aleatória escolhida: " + GerenciadorCartas.catalogoDeAtaque.get(indiceAtaque).
                     getNome());
             deck.addAtaque(GerenciadorCartas.catalogoDeAtaque.get(indiceAtaque));
         }
@@ -353,7 +350,7 @@ public class Main {
                 }
                 if(!repetido) break; //se nao for repetido ==> carta valida, sai do while
             }
-            replay.registrar("Carta aleatória escolhida: " + GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa - 1).
+            replay.registrar("Carta aleatória escolhida: " + GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa).
                     getNome());
             deck.addDefesa(GerenciadorCartas.catalogoDeDefesa.get(indiceDefesa));
             }
@@ -373,7 +370,7 @@ public class Main {
                 }
                 if(!repetido) break; //se nao for repetido ==> carta valida, sai do while
             }
-            replay.registrar("Carta aleatória escolhida: " + GerenciadorCartas.catalogoDeDefesa.get(indiceSuporte - 1).
+            replay.registrar("Carta aleatória escolhida: " + GerenciadorCartas.catalogoDeDefesa.get(indiceSuporte).
                     getNome());
             deck.addSuporte(GerenciadorCartas.catalogoDeSuporte.get(indiceSuporte));
         }
