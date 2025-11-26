@@ -3,7 +3,8 @@ package equipe404.rpg;
 import equipe404.rpg.model.Deck;
 import equipe404.rpg.model.Hacker;
 
- import java.util.Locale;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -16,6 +17,14 @@ public class Main {
     public static void exibirMenu() {
         Scanner scanner = new Scanner(System.in);
         GerenciadorReplay replay = new GerenciadorReplay();
+        System.out.println("\n=== Inicio do Jogo Cyber Duel ===\n");
+        System.out.println("Bem-vindo ao ciberespaço, o novo campo de batalha das megacorporações. O combate físico " +
+                "acabou!\nAgora, o poder é disputado através de duelos estratégicos entre os hackers mais habilidosos " +
+                "do planeta.\n");
+        System.out.println("--- REGRAS ---\n1. Escolha o modo de jogo (Versus humano ou bot)\n" +
+                "2. Escolha o Deck (Manual ou Aleatório)\n" +
+                "3. Escolha as Cartas que vão ser utilizadas na rodada\n" +
+                "4. O jogo termina se sua Vida chegar a zero\n");
         replay.registrar("=== Inicio do Jogo Cyber Duel ===");
 
         while (true) {
@@ -75,6 +84,9 @@ public class Main {
                 // Cria e inicia a partida
                 Partida novaPartida = new Partida(h1, h2, replay);
                 novaPartida.iniciar();
+
+                verificarFimDeJogo(h1,h2,replay);
+
                 System.out.println("\n------------------------------------------------");
                 System.out.println("Fim de jogo! Deseja salvar o arquivo de Replay? (S/N)");
                 String opcaoReplay = scanner.nextLine();
@@ -85,8 +97,6 @@ public class Main {
                 } else {
                     System.out.println("Replay descartado.");
                 }
-
-                verificarFimDeJogo(h1,h2);
                 break;
 
             } else if (escolha.equals("2")) {
@@ -124,6 +134,9 @@ public class Main {
 
                 Partida novaPartida = new Partida(h1, h2, replay);
                 novaPartida.iniciar();
+
+                verificarFimDeJogo(h1,h2,replay);
+
                 System.out.println("\n------------------------------------------------");
                 System.out.println("Fim de jogo! Deseja salvar o arquivo de Replay? (S/N)");
                 String opcaoReplay = scanner.nextLine();
@@ -134,7 +147,6 @@ public class Main {
                 } else {
                     System.out.println("Replay descartado.");
                 }
-                verificarFimDeJogo(h1,h2);
                 break;
 
             } else if (escolha.equals("3")) {
@@ -378,22 +390,56 @@ public class Main {
         hacker.setDeckCopia(copia);
     }
 
-    public static boolean verificarFimDeJogo(Hacker h1, Hacker h2) {
+    public static boolean verificarFimDeJogo(Hacker h1, Hacker h2, GerenciadorReplay replay) {
         if (h1.getHp() <= 0) {
-            System.out.println("\n====================");
-            System.out.println("☠ O SISTEMA DE " + h1.getNome() + "FOI INVADIDO! ☠");
+            System.out.println("\n============================");
+            replay.registrar("\n============================");
+            mensagemFinal(h1.getNome(),replay);
             System.out.println("🏅 VENCEDOR " + h2.getNome());
-            System.out.println("====================");
+            System.out.println("============================");
+            replay.registrar("🏅 VENCEDOR " + h2.getNome());
+            replay.registrar("============================");
             return true;
         }
         if (h2.getHp() <= 0) {
-            System.out.println("\n====================");
-            System.out.println("☠ O SISTEMA DE " + h2.getNome().toUpperCase(Locale.ROOT) + " FOI INVADIDO! ☠");
+            System.out.println("\n============================");
+            replay.registrar("\n============================");
+            mensagemFinal(h2.getNome(),replay);
             System.out.println("🏅 VENCEDOR " + h1.getNome());
-            System.out.println("====================");
+            System.out.println("============================");
+            replay.registrar("🏅 VENCEDOR " + h1.getNome());
+            replay.registrar("============================");
             return true;
         }
         return false;
+    }
+
+    public static void mensagemFinal(String nomeHacker, GerenciadorReplay replay){
+        Random r = new Random();
+        int indice = r.nextInt(7);
+
+        if(indice == 1){
+            System.out.println("☠ O SISTEMA DE " + nomeHacker + " FOI INVADIDO! ☠");
+            replay.registrar("☠ O SISTEMA DE " + nomeHacker + " FOI INVADIDO! ☠");
+        } else if (indice == 2) {
+            System.out.println("☠ A SENHA ERA 12345! " + nomeHacker + " FOI BANIDO DA REDE. ☠");
+            replay.registrar("☠ A SENHA ERA 12345! " + nomeHacker + " FOI BANIDO DA REDE. ☠");
+        } else if (indice == 3) {
+            System.out.println("☠ VÍRUS INSTALADO COM SUCESSO! " + nomeHacker + " AGORA ESTÁ PRESO EM UM LOOP INFINITO!! ☠");
+            replay.registrar("☠ VÍRUS INSTALADO COM SUCESSO! " + nomeHacker + " AGORA ESTÁ PRESO EM UM LOOP INFINITO!! ☠");
+        } else if (indice == 4) {
+            System.out.println("☠ ERRO 404: " + nomeHacker + " NÃO ENCONTRADO NA REDE! ☠");
+            replay.registrar("☠ ERRO 404: " + nomeHacker + " NÃO ENCONTRADO NA REDE! ☠");
+        } else if (indice == 5) {
+            System.out.println("☠ PELO VISTO A INTERNET DE " + nomeHacker + " ERA DE ESCADA! ☠");
+            replay.registrar("☠ PELO VISTO A INTERNET DE " + nomeHacker + " ERA DE ESCADA! ☠");
+        } else if (indice == 6) {
+            System.out.println("☠ A ESTRATÉGIA DE " + nomeHacker + " ERA FRACA. AGORA SÓ RODA JOGO DA COBRINHA! ☠");
+            replay.registrar("☠ A ESTRATÉGIA DE " + nomeHacker + " ERA FRACA. AGORA SÓ RODA JOGO DA COBRINHA! ☠");
+        } else {
+            System.out.println("☠ ESSA FOI FÁCIL " + nomeHacker + ". MELHORE SEUS FIREWALLS DA PRÓXIMA VEZ! ☠");
+            replay.registrar("☠ ESSA FOI FÁCIL " + nomeHacker + ". MELHORE SEUS FIREWALLS DA PRÓXIMA VEZ! ☠");
+        }
     }
 
 }

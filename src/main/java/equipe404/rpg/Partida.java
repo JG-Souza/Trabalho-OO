@@ -128,11 +128,9 @@ public class Partida {
             List <Carta> jogadasDoPrimeiro = (primeiroAJogar.getNome().equals("BOT")) ? primeiroAJogar.jogarCartaBot(replay) : primeiroAJogar.jogarCarta(replay);
 
             if(jogadasDoPrimeiro == null){
-                System.out.println("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n" +
-                        "=== O JOGADOR " + this.hacker2.getNome() + " VENCEU A PARTIDA! ===\n");
+                System.out.println("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n");
 
-                replay.registrar("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n" +
-                        "=== O JOGADOR " + this.hacker2.getNome() + " VENCEU A PARTIDA! ===\n");
+                replay.registrar("\nO jogador " + this.hacker1.getNome() + " entregou o sistema!\n");
                 break;
             }
 
